@@ -24,8 +24,8 @@ namespace QDryClean.Application.UseCases.Items.Validations
                 .WithMessage("Item with this ID does not exist");
 
             RuleFor(x => x)
-                .Must(x => !string.IsNullOrWhiteSpace(x.Colour) 
-                    || !string.IsNullOrWhiteSpace(x.BrandName) 
+                .Must(x => !string.IsNullOrWhiteSpace(x.Colour)
+                    || !string.IsNullOrWhiteSpace(x.BrandName)
                     || !string.IsNullOrWhiteSpace(x.Description))
                     .WithMessage("At least one of Colour, Brand Name, or Description must be provided for update.");
         }

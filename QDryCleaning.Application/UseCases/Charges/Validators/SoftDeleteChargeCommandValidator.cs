@@ -4,7 +4,7 @@ using QDryClean.Application.UseCases.Charges.Commands;
 namespace QDryClean.Application.UseCases.Charges.Validators
 {
     public class SoftDeleteChargeCommandValidator
-        :  AbstractValidator<SoftDeleteChargeCommand>
+        : AbstractValidator<SoftDeleteChargeCommand>
     {
         public SoftDeleteChargeCommandValidator()
         {

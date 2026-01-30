@@ -12,7 +12,7 @@ namespace QDryClean.Application.UseCases.ItemTypes.Validators
                 .NotNull().WithMessage("Item Type ID is required.")
                 .NotEmpty().WithMessage("Item Type ID is required.")
                 .GreaterThan(0);
-          
+
             RuleFor(x => x.Name)
                 .NotNull().WithMessage("Item Type Name is required.")
                 .NotEmpty().WithMessage("Item Type Name is required.")
