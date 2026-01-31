@@ -18,11 +18,10 @@ namespace QDryClean.Application.UseCases.Charges.Handlers
             IMapper mapper) : base(applicationDbContext, currentUserService, mapper) { }
         public async Task<ApiResponse<ChargeDto>> Handle(CreateChargeCommand request, CancellationToken cancellationToken)
         {
-            var charge = await _applicationDbContext.Charges.FirstOrDefaultAsync(u => u.Name == request.Name, cancellationToken);
-
-            charge = _mapper.Map<Charge>(request);
+            var charge = _mapper.Map<Charge>(request);
             charge.CreatedBy = _currentUserService.UserId;
             charge.CreatedAt = DateTime.Now;
+
             await _applicationDbContext.Charges.AddAsync(charge, cancellationToken);
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
             return ApiResponseFactory.Ok(_mapper.Map<ChargeDto>(charge));

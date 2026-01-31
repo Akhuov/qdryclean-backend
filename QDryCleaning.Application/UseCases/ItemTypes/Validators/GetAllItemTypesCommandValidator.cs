@@ -13,10 +13,13 @@ namespace QDryClean.Application.UseCases.ItemTypes.Validators
         {
             _dbContext = dbContext;
             RuleFor(x => x)
+                .Cascade(CascadeMode.Stop)
                 .NotNull().WithMessage("Request cannot be null")
                 .MustAsync(async (command, id, cancellationToken) =>
                 {
-                    return await _dbContext.ItemTypes.AnyAsync(c => c.DeletedAt == null && c.DeletedBy == null, cancellationToken);
+                    return await _dbContext.ItemTypes.AnyAsync(
+                        c => c.DeletedAt == null 
+                            && c.DeletedBy == null, cancellationToken);
                 })
                 .WithMessage("Item Types not found!");
         }

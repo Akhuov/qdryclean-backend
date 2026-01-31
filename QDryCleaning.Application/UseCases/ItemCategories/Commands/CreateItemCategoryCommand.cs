@@ -7,5 +7,6 @@ namespace QDryClean.Application.UseCases.ItemCategories.Commands
     public class CreateItemCategoryCommand : IRequest<ApiResponse<ItemCategoryDto>>
     {
         public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

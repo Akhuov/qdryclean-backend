@@ -4,6 +4,6 @@
     {
         public string Name { get; set; }
         public string? Description { get; set; }
-        public ICollection<ItemType> Invoices { get; set; } = new List<ItemType>();
+        public ICollection<ItemType> ItemTypes { get; set; } = new List<ItemType>();
     }
 }

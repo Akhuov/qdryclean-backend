@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using QDryClean.Application.UseCases.ItemCategories.Commands;
 using QDryClean.Application.UseCases.ItemCategories.Querries;
 using QDryClean.Domain.Enums;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace QDryClean.Api.Controllers
 {
@@ -28,9 +29,9 @@ namespace QDryClean.Api.Controllers
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
         [HttpDelete("{itemCategoryId:int}")]
-        public async Task<IActionResult> DeleteItemCategoryAsync(SoftDeleteItemCategoryCommand command)
+        public async Task<IActionResult> DeleteItemCategoryAsync(int itemCategoryId)
         {
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(new SoftDeleteItemCategoryCommand() { Id = itemCategoryId });
             return Ok(result);
         }
 

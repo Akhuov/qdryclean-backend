@@ -19,7 +19,7 @@ namespace QDryClean.Application.UseCases.ItemCategories.Handlers
         public async Task<ApiResponse<List<ItemCategoryDto>>> Handle(GetAllItemCategoriesQuerry request, CancellationToken cancellationToken)
         {
 
-            var itemCategories = await _applicationDbContext.ItemCategories.ToListAsync();
+            var itemCategories = await _applicationDbContext.ItemCategories.Where(x => x.DeletedAt == null && x.DeletedBy == null).ToListAsync();
 
             var listOfItemCategoryDtos = new List<ItemCategoryDto>();
             foreach (var itemCategory in itemCategories)
@@ -27,10 +27,10 @@ namespace QDryClean.Application.UseCases.ItemCategories.Handlers
                 listOfItemCategoryDtos.Add(new ItemCategoryDto()
                 {
                     Id = itemCategory.Id,
-                    Name = itemCategory.Name
+                    Name = itemCategory.Name,
+                    Description = itemCategory.Description
                 });
             }
-
             return ApiResponseFactory.Ok(listOfItemCategoryDtos);
         }
     }

@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using QDryClean.Application.Absreactions;
-using QDryClean.Application.Common.Exceptions;
 using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Application.Common.Responses;
 using QDryClean.Application.Dtos;
@@ -19,8 +18,8 @@ namespace QDryClean.Application.UseCases.Items.Handlers
 
         public async Task<ApiResponse<ItemDto>> Handle(GetByIdItemQuerry request, CancellationToken cancellationToken)
         {
-                var item = await _applicationDbContext.Items.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
-                return ApiResponseFactory.Ok(_mapper.Map<ItemDto>(item));
+            var item = await _applicationDbContext.Items.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
+            return ApiResponseFactory.Ok(_mapper.Map<ItemDto>(item));
         }
     }
 }
