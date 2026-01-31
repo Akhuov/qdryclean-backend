@@ -18,9 +18,8 @@ namespace QDryClean.Application.UseCases.ItemCategories.Handlers
 
         public async Task<ApiResponse<ItemCategoryDto>> Handle(GetByIdItemCategoryQuerry request, CancellationToken cancellationToken)
         {
-
             var itemCategory = await _applicationDbContext.ItemCategories.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
-            return ApiResponseFactory.Ok(new ItemCategoryDto() { Id = itemCategory.Id, Name = itemCategory.Name });
+            return ApiResponseFactory.Ok(new ItemCategoryDto() { Id = itemCategory.Id, Name = itemCategory.Name, Description = itemCategory.Description });
         }
     }
 }

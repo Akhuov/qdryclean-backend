@@ -30,15 +30,15 @@ namespace QDryClean.Api.Controllers
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
         [HttpDelete("{itemTypeId:int}")]
-        public async Task<IActionResult> DeleteItemTypeAsync(SoftDeleteItemTypeCommand command)
+        public async Task<IActionResult> DeleteItemTypeAsync(int itemTypeId)
         {
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(new SoftDeleteItemTypeCommand() { Id = itemTypeId });
             return Ok(result);
         }
 
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
-        [HttpPut]
+        [HttpPatch]
         public async Task<IActionResult> UpdateItemTypeAsync(UpdateItemTypeCommand command)
         {
             var result = await _mediator.Send(command);

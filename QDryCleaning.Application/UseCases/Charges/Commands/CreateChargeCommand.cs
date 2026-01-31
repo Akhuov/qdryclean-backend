@@ -4,7 +4,9 @@ using QDryClean.Application.Dtos;
 
 namespace QDryClean.Application.UseCases.Charges.Commands
 {
-    public class CreateChargeCommand : ChargeDto, IRequest<ApiResponse<ChargeDto>>
+    public class CreateChargeCommand : IRequest<ApiResponse<ChargeDto>>
     {
+        public decimal Cost { get; set; }
+        public string? Name { get; set; }
     }
 }

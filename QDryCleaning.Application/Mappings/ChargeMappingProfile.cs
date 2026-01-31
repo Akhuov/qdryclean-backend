@@ -11,8 +11,14 @@ namespace QDryClean.Application.Mappings
         {
             CreateMap<Charge, ChargeDto>();
             CreateMap<ChargeDto, CreateChargeCommand>().ReverseMap();
+
+            CreateMap<CreateChargeCommand, Charge>()
+                .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+
             CreateMap<ChargeDto, Charge>()
-                .ForMember(dest => dest.ItemType, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())

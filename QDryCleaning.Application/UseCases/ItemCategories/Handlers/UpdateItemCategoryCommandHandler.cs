@@ -21,12 +21,13 @@ namespace QDryClean.Application.UseCases.ItemCategories.Handlers
             var itemCategory = await _applicationDbContext.ItemCategories.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
 
             itemCategory.Name = request.Name;
+            itemCategory.Description = request.Description;
             itemCategory.UpdatedBy = _currentUserService.UserId;
             itemCategory.UpdatedAt = DateTime.Now;
 
             _applicationDbContext.ItemCategories.Update(itemCategory);
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
-            return ApiResponseFactory.Ok(new ItemCategoryDto() { Id = itemCategory.Id, Name = itemCategory.Name });
+            return ApiResponseFactory.Ok(new ItemCategoryDto() { Id = itemCategory.Id, Name = itemCategory.Name, Description = itemCategory.Description });
         }
     }
 }

@@ -5,6 +5,6 @@ namespace QDryClean.Domain.Entities
     {
         public decimal Cost { get; set; }
         public string Name { get; set; }
-        public ItemType? ItemType { get; set; }
+        public ICollection<ItemType> ItemTypes { get; set; } = new List<ItemType>();
     }
 }

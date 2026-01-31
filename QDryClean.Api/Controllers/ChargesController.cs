@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using QDryClean.Application.UseCases.Charges.Commands;
 using QDryClean.Application.UseCases.Charges.Quarries;
 using QDryClean.Domain.Enums;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace QDryClean.Api.Controllers
 {
@@ -17,6 +18,8 @@ namespace QDryClean.Api.Controllers
         {
             _mediator = mediator;
         }
+
+
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
         [HttpPost]
         public async Task<IActionResult> CreateChargeAsync(CreateChargeCommand command)
@@ -24,13 +27,17 @@ namespace QDryClean.Api.Controllers
             var result = await _mediator.Send(command);
             return Created("Charge created successfully.", result);
         }
+
+
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
-        [HttpDelete]
-        public async Task<IActionResult> DeleteChargeAsync(SoftDeleteChargeCommand command)
+        [HttpDelete("{chargeId:int}")]
+        public async Task<IActionResult> DeleteChargeAsync(int chargeId)
         {
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(new SoftDeleteChargeCommand() { Id = chargeId});
             return Ok(result);
         }
+
+
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
         [HttpPut]
         public async Task<IActionResult> UpdateChargeAsync(UpdateChargeCommand command)
@@ -38,6 +45,8 @@ namespace QDryClean.Api.Controllers
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+
+
         [HttpGet]
         public async Task<IActionResult> GetAllChargesAsync()
         {
@@ -46,11 +55,11 @@ namespace QDryClean.Api.Controllers
             return Ok(result);
         }
 
+
         [HttpGet("{chargeId:int}")]
         public async Task<IActionResult> GetByIdChargeAsync(int chargeId)
         {
-            var command = new GetByIdChargeCommand() { Id = chargeId };
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(new GetByIdChargeCommand() { Id = chargeId });
             return Ok(result);
         }
     }

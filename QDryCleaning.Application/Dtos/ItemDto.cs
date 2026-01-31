@@ -7,7 +7,5 @@ namespace QDryClean.Application.Dtos
         public string? Colour { get; set; }
         public string? BrandName { get; set; }
         public string? Description { get; set; }
-        public ItemType ItemType { get; set; }
-        public Order Order { get; set; }
     }
 }

@@ -13,14 +13,21 @@ namespace QDryClean.Application.UseCases.ItemTypes.Validators
         {
             _dbContext = dbContext;
             RuleFor(x => x.Id)
-                .NotNull().WithMessage("Item Type ID is required")
-                .NotEmpty().WithMessage("Item Type ID is required")
-                .GreaterThan(0).WithMessage("Item Type Id must be greater than zero.")
+                .Cascade(CascadeMode.Stop)
+                .NotNull()
+                    .WithMessage("Item Type ID is required")
+                .NotEmpty()
+                    .WithMessage("Item Type ID is required")
+                .GreaterThan(0)
+                    .WithMessage("Item Type Id must be greater than zero.")
                 .MustAsync(async (command, id, cancellationToken) =>
                 {
                     return await _dbContext.ItemTypes
-                        .AnyAsync(it => it.Id == id && it.DeletedAt == null && it.DeletedBy == null, cancellationToken);
-                }).WithMessage("Item Type with this ID does not exist");
+                        .AnyAsync(it => it.Id == id 
+                            && it.DeletedAt == null 
+                            && it.DeletedBy == null, cancellationToken);
+                })
+                .WithMessage("Item Type with this ID does not exist");
         }
     }
 }
