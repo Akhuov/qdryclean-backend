@@ -17,10 +17,9 @@ namespace QDryClean.Application.UseCases.Items.Handlers
             IMapper mapper) : base(applicationDbContext, currentUserService, mapper) { }
         public async Task<ApiResponse<ItemDto>> Handle(CreateItemCommand request, CancellationToken cancellationToken)
         {
-
             var item = _mapper.Map<Item>(request);
             item.CreatedBy = _currentUserService.UserId;
-            item.CreatedAt = DateTime.Now;
+            item.CreatedAt = DateTime.UtcNow;
             await _applicationDbContext.Items.AddAsync(item, cancellationToken);
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
             return ApiResponseFactory.Ok(_mapper.Map<ItemDto>(item));

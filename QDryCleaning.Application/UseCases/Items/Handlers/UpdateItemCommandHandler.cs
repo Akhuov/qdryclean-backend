@@ -20,17 +20,17 @@ namespace QDryClean.Application.UseCases.Items.Handlers
         {
             var item = await _applicationDbContext.Items.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
 
-            if (item.Colour != null)
+            if (request.Colour != null)
             {
                 item.Colour = request.Colour;
             }
 
-            if (item.Description != null)
+            if (request.Description != null)
             {
                 item.Description = request.Description;
             }
 
-            if (item.BrandName != null)
+            if (request.BrandName != null)
             {
                 item.BrandName = request.BrandName;
             }

@@ -44,8 +44,9 @@ public class ErrorHandlingMiddleware
                 InvalidLoginOrPasswordException => StatusCodes.Status401Unauthorized,
                 _ => StatusCodes.Status500InternalServerError
             };
+            var message = ex.InnerException?.Message ?? ex.Message;
 
-            await context.Response.WriteAsJsonAsync(response);
+            await context.Response.WriteAsJsonAsync(ApiResponseFactory.Fail<object>(code, message));
         }
     }
 }
