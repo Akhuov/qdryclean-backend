@@ -8,6 +8,6 @@ namespace QDryClean.Application.UseCases.ItemTypes.Commands
     {
         public string Name { get; set; }
         public int ItemCategoryId { get; set; }
-        public int ChargeId { get; set; }
+        public int? ChargeId { get; set; } = null;
     }
 }

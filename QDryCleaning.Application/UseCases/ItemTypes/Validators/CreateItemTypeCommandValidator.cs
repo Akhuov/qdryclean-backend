@@ -56,18 +56,17 @@ namespace QDryClean.Application.UseCases.ItemTypes.Validators
 
 
             RuleFor(x => x.ChargeId)
-                .NotNull()
-                    .WithMessage("Charge ID is required.")
-                .NotEmpty()
-                    .WithMessage("Charge ID is required.")
-                .GreaterThan(0).WithMessage("Charge ID must be greater than zero.")
+                .Cascade(CascadeMode.Stop)
+                .GreaterThan(0)
+                    .WithMessage("Charge ID must be greater than zero.")
                 .MustAsync(async (command, id, cancellationToken) =>
                 {
-                    return await _dbContext.ItemCategories.AnyAsync(
+                    return await _dbContext.Charges.AnyAsync(
                         c => c.Id == id
                             && c.DeletedAt == null
                             && c.DeletedBy == null, cancellationToken);
                 })
+                    .When(x => x.ChargeId.HasValue)
                     .WithMessage("Charge with this ID does not exist");
         }
     }

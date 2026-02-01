@@ -15,8 +15,14 @@ namespace QDryClean.Application.Mappings
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.ItemTypeId, opt => opt.Ignore())
-                .ForMember(dest => dest.OrderId, opt => opt.Ignore());
+                .ForMember(dest => dest.ItemTypeId, opt =>
+                {
+                    opt.Condition(src => src.ItemTypeId != 0);
+                })
+                .ForMember(dest => dest.OrderId, opt =>
+                {
+                    opt.Condition(src => src.OrderId != null && src.OrderId != 0);
+                });
         }
     }
 }

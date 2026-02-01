@@ -14,7 +14,8 @@ namespace QDryClean.Application.UseCases.ItemTypes.Validators
             _dbContext = dbContext;
             RuleFor(x => x)
                 .Cascade(CascadeMode.Stop)
-                .NotNull().WithMessage("Request cannot be null")
+                .NotNull()
+                    .WithMessage("Request cannot be null")
                 .MustAsync(async (command, id, cancellationToken) =>
                 {
                     return await _dbContext.ItemTypes.AnyAsync(

@@ -13,12 +13,18 @@ namespace QDryClean.Application.UseCases.Items.Validations
         {
             _dbContext = dbContext;
             RuleFor(x => x.Id)
-                .NotEmpty().WithMessage("Item Id is required.")
-                .GreaterThan(0).WithMessage("Item Id must be greater than zero.")
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty()
+                    .WithMessage("Item Id is required.")
+                .GreaterThan(0)
+                    .WithMessage("Item Id must be greater than zero.")
                 .MustAsync(async (command, id, cancellationToken) =>
                 {
-                    return await _dbContext.Items.AnyAsync(c => c.Id == id && c.DeletedAt == null && c.DeletedBy == null, cancellationToken);
-                }).WithMessage("Item with Id not found!");
+                    return await _dbContext.Items.AnyAsync(c => c.Id == id
+                        && c.DeletedAt == null
+                        && c.DeletedBy == null, cancellationToken);
+                })
+                    .WithMessage("Item with Id not found!");
         }
     }
 }
