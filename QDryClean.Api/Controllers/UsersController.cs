@@ -37,11 +37,11 @@ namespace QDryClean.Api.Controllers
             return Ok("User deleted successfully.");
         }
 
-
-        [HttpPut]
         [Authorize(Roles = nameof(UserRole.Admin))]
-        public async Task<IActionResult> UpdateUserAsync(UpdateUserCommand command)
+        [HttpPut("{userId:int}")]
+        public async Task<IActionResult> UpdateUserAsync(int userId, UpdateUserCommand command)
         {
+            command.Id = userId;
             var result = await _mediator.Send(command);
             return Ok(result);
         }

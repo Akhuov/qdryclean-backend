@@ -20,10 +20,7 @@ namespace QDryClean.Application.UseCases.Customers.Handlers
 
         public async Task<ApiResponse<CustomerDto>> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
-            var customer = await _applicationDbContext.Customers
-                .FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber, cancellationToken);
-
-            customer = _mapper.Map<Customer>(request);
+            var customer = _mapper.Map<Customer>(request);
             customer.PhoneNumber = PhoneNumberHelper.NormalizePhoneNumber(request.PhoneNumber);
             customer.CreatedBy = _currentUserService.UserId;
             customer.CreatedAt = DateTime.Now;

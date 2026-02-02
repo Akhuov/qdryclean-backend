@@ -36,9 +36,10 @@ namespace QDryClean.Api.Controllers
         }
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
-        [HttpPut]
-        public async Task<IActionResult> UpdateItemCategoryAsync(UpdateItemCategoryCommand command)
+        [HttpPut("{itemCategoryId:int}")]
+        public async Task<IActionResult> UpdateItemCategoryAsync(int itemCategoryId, UpdateItemCategoryCommand command)
         {
+            command.Id = itemCategoryId;
             var result = await _mediator.Send(command);
             return Ok(result);
         }
