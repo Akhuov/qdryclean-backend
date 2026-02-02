@@ -35,9 +35,10 @@ namespace QDryClean.Api.Controllers
         }
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
-        [HttpPut]
-        public async Task<IActionResult> UpdateCustomerAsync([FromBody] UpdateCustomerCommand command)
+        [HttpPut("{customerId:int}")]
+        public async Task<IActionResult> UpdateCustomerAsync(int customerId, UpdateCustomerCommand command)
         {
+            command.Id = customerId;
             var result = await _mediator.Send(command);
             return Ok(result);
         }
@@ -45,8 +46,7 @@ namespace QDryClean.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCustomersAsync()
         {
-            var command = new GetAllCustomersQuery();
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(new GetAllCustomersQuery());
             return Ok(result);
         }
 

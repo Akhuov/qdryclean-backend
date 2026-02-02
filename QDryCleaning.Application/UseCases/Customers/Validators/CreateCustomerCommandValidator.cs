@@ -15,8 +15,11 @@ public class CreateCustomerCommandValidator
         _dbContext = dbContext;
 
         RuleFor(x => x.FirstName)
+            .Cascade(CascadeMode.Stop)
+            .NotNull()
+                .WithMessage("First Name is required")
             .NotEmpty()
-            .WithMessage("First Name is required");
+                .WithMessage("First Name is required");
 
         RuleFor(x => x.PhoneNumber)
             .NotEmpty()
