@@ -2,9 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using QDryClean.Application.Absreactions;
+using QDryClean.Application.Common.Interfaces.Auth;
 using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Infrastructure.Persistance;
 using QDryClean.Infrastructure.Services;
+using QDryClean.Infrastructure.Services.JWT;
 
 namespace QDryClean.Infrastructure
 {
@@ -20,7 +22,10 @@ namespace QDryClean.Infrastructure
 
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
-
+            //Memory Cache (didn't use yet)
+            services.AddMemoryCache();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IAuthService, AuthService>();
             return services;
         }
     }
