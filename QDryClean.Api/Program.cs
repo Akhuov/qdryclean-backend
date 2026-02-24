@@ -21,11 +21,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAplication();
 
-//Memory Cache (didn't use yet)
-builder.Services.AddMemoryCache();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-
 // Controllers and JSON options to ignore cycles
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -142,7 +137,7 @@ if (app.Environment.IsDevelopment())
 //app.UseRouting();
 //app.UseHttpsRedirection();
 
-app.UseAuthentication();//Its for JWT Token and Authorization must be before UseAuthorization
+app.UseAuthentication(); //Its for JWT Token and Authorization must be before UseAuthorization
 app.UseAuthorization();
 app.UseCors("AllowReactApp");
 
