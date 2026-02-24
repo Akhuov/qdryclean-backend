@@ -15,7 +15,6 @@ namespace QDryClean.Application.Mappings
 
             CreateMap<CreateOrderCommand, Order>()
                 .ForMember(dest => dest.ReceiptNumber, opt => opt.Ignore())
-                .ForMember(dest => dest.Items, opt => opt.Ignore())
                 .ForMember(dest => dest.Invoice, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())

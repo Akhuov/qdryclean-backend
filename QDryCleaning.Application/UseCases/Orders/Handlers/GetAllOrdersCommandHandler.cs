@@ -17,7 +17,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
            IMapper mapper) : base(applicationDbContext, currentUserService, mapper) { }
         public async Task<ApiResponse<List<OrderDto>>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
         {
-            var orders = await _applicationDbContext.Orders.ToListAsync();
+            var orders = await _applicationDbContext.Orders.AsNoTracking().Include(x => x.Items).ToListAsync();
 
             var list_of_orderDtos = new List<OrderDto>();
             foreach (var invoice in orders)

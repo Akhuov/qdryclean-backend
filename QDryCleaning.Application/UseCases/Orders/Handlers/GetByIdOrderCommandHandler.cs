@@ -17,7 +17,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
             IMapper mapper) : base(applicationDbContext, currentUserService, mapper) { }
         public async Task<ApiResponse<OrderDto>> Handle(GetByIdOrderQuery request, CancellationToken cancellationToken)
         {
-            var order = await _applicationDbContext.Orders.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
+            var order = await _applicationDbContext.Orders.AsNoTracking().Include(x => x.Items).FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
             return ApiResponseFactory.Ok(_mapper.Map<OrderDto>(order));
         }
     }
