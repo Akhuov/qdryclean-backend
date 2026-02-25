@@ -1,4 +1,4 @@
-﻿namespace QDryClean.Application.Common.Interfaces
+﻿namespace QDryClean.Application.Common.Interfaces.Services
 {
     public interface IPagedQuery
     {

@@ -26,6 +26,9 @@ namespace QDryClean.Infrastructure
             services.AddMemoryCache();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IQrCodeService, QrCodeService>();
+            services.AddScoped<IBarCodeService, BarCodeService>();
+
             return services;
         }
     }

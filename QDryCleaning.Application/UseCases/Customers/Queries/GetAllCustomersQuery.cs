@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using QDryClean.Application.Common.Interfaces;
+using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Application.Common.Pagination;
 using QDryClean.Application.Common.Responses;
 using QDryClean.Application.Dtos;
