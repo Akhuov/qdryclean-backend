@@ -1,4 +1,4 @@
-﻿using QDryClean.Application.Common.Interfaces;
+﻿using QDryClean.Application.Common.Interfaces.Services;
 using QRCoder;
 
 namespace QDryClean.Infrastructure.Services

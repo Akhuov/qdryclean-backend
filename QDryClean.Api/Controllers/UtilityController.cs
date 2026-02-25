@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using QDryClean.Application.Common.Interfaces;
+using QDryClean.Application.Common.Interfaces.Services;
 
 namespace QDryClean.Api.Controllers
 {

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using QDryClean.Application.Absreactions;
-using QDryClean.Application.Common.Interfaces;
+using QDryClean.Application.Common.Interfaces.Services;
 
 namespace QDryClean.Application.Common.Validators
 {

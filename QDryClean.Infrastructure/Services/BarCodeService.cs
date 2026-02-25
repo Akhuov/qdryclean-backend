@@ -1,4 +1,4 @@
-﻿using QDryClean.Application.Common.Interfaces;
+﻿using QDryClean.Application.Common.Interfaces.Services;
 using System.Text;
 using ZXing;
 using ZXing.Common;
