@@ -15,5 +15,7 @@ namespace QDryClean.Application.Absreactions
         public DbSet<Charge> Charges { get; set; }
 
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+
+        DbSet<TEntity> Set<TEntity>() where TEntity : class;
     }
 }

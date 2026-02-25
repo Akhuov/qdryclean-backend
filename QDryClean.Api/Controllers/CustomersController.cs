@@ -46,7 +46,7 @@ namespace QDryClean.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCustomersAsync(
             [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 20)
+            [FromQuery] int pageSize = 10)
         {
             var result = await _mediator.Send(new GetAllCustomersQuery() { Page = page, PageSize = pageSize});
             return Ok(result);

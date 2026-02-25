@@ -6,7 +6,8 @@ namespace QDryClean.Infrastructure.Persistance
 {
     public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
-
+        public DbSet<TEntity> Set<TEntity>() where TEntity : class
+            => base.Set<TEntity>();
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

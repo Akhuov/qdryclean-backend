@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using QDryClean.Application.Absreactions;
@@ -20,8 +21,10 @@ namespace QDryClean.Application.UseCases.Customers.Handlers
         public async Task<ApiResponse<PagedResult<CustomerDto>>> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
         {
             var baseQuery = _applicationDbContext.Customers
-            .AsNoTracking().Where(x => x.DeletedAt == null 
-                && x.DeletedBy == null);
+                .Where(x => x.DeletedAt == null && x.DeletedBy == null)
+                .AsNoTracking()
+                .OrderBy(x => x.Id)
+                .ProjectTo<CustomerDto>(_mapper.ConfigurationProvider);
 
             var pagedResult = await baseQuery
                 .AsNoTracking()
@@ -29,15 +32,6 @@ namespace QDryClean.Application.UseCases.Customers.Handlers
                 .ToPagedResultAsync(
                     request.Page,
                     request.PageSize,
-                    c => new CustomerDto
-                    {
-                        Id = c.Id,
-                        FirstName = c.FirstName,
-                        LastName = c.LastName,
-                        PhoneNumber = c.PhoneNumber,
-                        AdditionalPhoneNumber = c.AdditionalPhoneNumber,
-                        Points = c.Points
-                    },
                     cancellationToken
                 );
 
