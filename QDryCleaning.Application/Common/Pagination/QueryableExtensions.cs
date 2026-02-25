@@ -5,11 +5,10 @@ namespace QDryClean.Application.Common.Pagination
 {
     public static class QueryableExtensions
     {
-        public static async Task<PagedResult<TResult>> ToPagedResultAsync<TSource, TResult>(
-            this IQueryable<TSource> query,
+        public static async Task<PagedResult<T>> ToPagedResultAsync<T>(
+            this IQueryable<T> query,
             int page,
             int pageSize,
-            Expression<Func<TSource, TResult>> selector,
             CancellationToken cancellationToken = default)
         {
             var totalCount = await query.CountAsync(cancellationToken);
@@ -17,15 +16,14 @@ namespace QDryClean.Application.Common.Pagination
             var items = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(selector)
                 .ToListAsync(cancellationToken);
 
-            return new PagedResult<TResult>
+            return new PagedResult<T>
             {
                 Items = items,
+                TotalCount = totalCount,
                 Page = page,
-                PageSize = pageSize,
-                TotalCount = totalCount
+                PageSize = pageSize
             };
         }
     }

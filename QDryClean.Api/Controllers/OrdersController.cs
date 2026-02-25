@@ -15,7 +15,7 @@ namespace QDryClean.Api.Controllers
 
         private readonly IMediator _mediator;
 
-        public OrdersController(IMediator mediator, IMapper mapper)
+        public OrdersController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -50,9 +50,11 @@ namespace QDryClean.Api.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllOrdersAsync()
+        public async Task<IActionResult> GetAllOrdersAsync(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var command = new GetAllOrdersQuery();
+            var command = new GetAllOrdersQuery() { Page = page, PageSize = pageSize };
             var result = await _mediator.Send(command);
             return Ok(result);
         }
@@ -65,8 +67,6 @@ namespace QDryClean.Api.Controllers
             var result = await _mediator.Send(command);
             return Ok(result);
         }
-
-        
     }
 
 }
