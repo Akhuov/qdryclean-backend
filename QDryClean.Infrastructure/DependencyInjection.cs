@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using QDryClean.Application.Absreactions;
+using QDryClean.Application.Common.Interfaces;
 using QDryClean.Application.Common.Interfaces.Auth;
 using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Infrastructure.Persistance;
@@ -26,6 +27,9 @@ namespace QDryClean.Infrastructure
             services.AddMemoryCache();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IQrCodeService, QrCodeService>();
+            services.AddScoped<IBarCodeService, BarCodeService>();
+
             return services;
         }
     }
