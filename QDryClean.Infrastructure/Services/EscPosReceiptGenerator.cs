@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QDryClean.Application.Absreactions;
+using QDryClean.Application.Common.Helpers;
 using QDryClean.Application.Common.Interfaces.Services;
 using System.Text;
 
@@ -9,10 +10,12 @@ namespace QDryClean.Infrastructure.Services
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IApplicationDbContext _dbContext;
-        public EscPosReceiptGenerator(ICurrentUserService currentUserService, IApplicationDbContext dbContext)
+        private readonly IQrCodeService _qrService;
+        public EscPosReceiptGenerator(ICurrentUserService currentUserService, IApplicationDbContext dbContext, IQrCodeService qrService)
         {
             _currentUserService = currentUserService;
             _dbContext = dbContext;
+            _qrService = qrService;
         }
         public async Task<byte[]> GenerateEscPos(int invoiceId)
         {
@@ -70,6 +73,14 @@ namespace QDryClean.Infrastructure.Services
             Write($"ИТОГО: {invoiceWithOrderItems.TotalCost}\n");
             Command(0x1B, 0x45, 0x00);
 
+            Write("\n");
+
+            // QR-код
+            var qrBytes = _qrService.GenerateQrCode($"{invoiceWithOrderItems.Order.ReceiptNumber}"); // или другой контент
+            var escPosQr = EscPosQrHelper.ConvertQrToEscPos(qrBytes);
+            builder.AddRange(escPosQr);
+            Command(0x1B, 0x61, 0x00);
+            Write($"Reseipt Number\n");
             Write("\n\n\n");
 
             // Обрезка бумаги
