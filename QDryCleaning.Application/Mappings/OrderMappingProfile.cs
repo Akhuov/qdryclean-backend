@@ -10,7 +10,7 @@ namespace QDryClean.Application.Mappings
         public OrderMappingProfile()
         {
             CreateMap<Order, OrderDto>();
-
+            
             CreateMap<CreateOrderCommand, OrderDto>().ReverseMap();
 
             CreateMap<CreateOrderCommand, Order>()
@@ -28,6 +28,11 @@ namespace QDryClean.Application.Mappings
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+
+            CreateMap<CreateOrderItemDto, Item>()
+                .ForMember(d => d.ItemType, opt => opt.Ignore())
+                .ForMember(d => d.Order, opt => opt.Ignore())
+                .ForMember(d => d.OrderId, opt => opt.Ignore());
         }
     }
 }
