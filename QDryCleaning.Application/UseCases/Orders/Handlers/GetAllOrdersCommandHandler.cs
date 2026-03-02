@@ -8,6 +8,7 @@ using QDryClean.Application.Common.Pagination;
 using QDryClean.Application.Common.Responses;
 using QDryClean.Application.Dtos;
 using QDryClean.Application.UseCases.Orders.Queries;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
@@ -21,13 +22,29 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
         {
             var baseQuery = _applicationDbContext.Orders
                 .Where(x => x.DeletedAt == null && x.DeletedBy == null)
-                .AsNoTracking()
-                .OrderBy(x => x.Id)
-                .ProjectTo<OrderDto>(_mapper.ConfigurationProvider);
+                .AsNoTracking();
+
+            if (!string.IsNullOrWhiteSpace(request.Search))
+            {
+                var s = request.Search.Trim();
+                var sLower = s.ToLower();
+
+                // если это число — расширяем поиск по числовым полям
+                var isNumber = int.TryParse(s, out var n);
+
+                baseQuery = baseQuery.Where(o =>
+                    (isNumber && (o.Id == n || o.ReceiptNumber == n || o.CustomerId == n)) ||
+                    // текстовый поиск (пример)
+                    o.Notes.Any(note => note.ToLower().Contains(sLower))
+                // если есть связанный Customer:
+                // || o.Customer.FullName.ToLower().Contains(sLower)
+                );
+            }
 
             var pagedResult = await baseQuery
                 .AsNoTracking()
-                .OrderBy(c => c.Id)
+                .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
+                .OrderByDescending(c => c.Id)
                 .ToPagedResultAsync(
                     request.Page,
                     request.PageSize,
