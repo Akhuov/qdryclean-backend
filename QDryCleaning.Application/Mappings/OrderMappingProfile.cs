@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using QDryClean.Api.ViewModels;
 using QDryClean.Application.Dtos;
 using QDryClean.Application.UseCases.Orders.Commands;
 using QDryClean.Domain.Entities;
@@ -12,6 +13,7 @@ namespace QDryClean.Application.Mappings
             CreateMap<Order, OrderDto>();
             
             CreateMap<CreateOrderCommand, OrderDto>().ReverseMap();
+            CreateMap<CreateOrderCommand, OrderViewModel>().ReverseMap();
 
             CreateMap<CreateOrderCommand, Order>()
                 .ForMember(dest => dest.ReceiptNumber, opt => opt.Ignore())

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QDryClean.Application.UseCases.Orders.Commands;
@@ -24,24 +23,18 @@ namespace QDryClean.Api.Controllers
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
         [HttpPost]
         public async Task<IActionResult> CreateOrderAsync(CreateOrderCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Created("Order created successfully.", result);
-        }
+            => Created("Order created successfully.", await _mediator.Send(command));
 
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
         [HttpDelete("{orderId:int}")]
         public async Task<IActionResult> DeleteOrderAsync(DeleteOrderCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
+            => Ok(await _mediator.Send(command));
 
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
         [HttpPut("{orderId:int}")]
-        public async Task<IActionResult> UpdateOrderAsync(int orderId, UpdateOrderCommand command)
+        public async Task<IActionResult> UpdateOrderAsync(int orderId, [FromBody] UpdateOrderCommand command)
         {
             command.Id = orderId;
             var result = await _mediator.Send(command);
@@ -50,23 +43,12 @@ namespace QDryClean.Api.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllOrdersAsync(
-            [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 10)
-        {
-            var command = new GetAllOrdersQuery() { Page = page, PageSize = pageSize };
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
+        public async Task<IActionResult> GetAllOrdersAsync([FromQuery] GetAllOrdersQuery query)
+            => Ok(await _mediator.Send(query));
 
 
         [HttpGet("{orderId:int}")]
         public async Task<IActionResult> GetByIdOrderAsync(int orderId)
-        {
-            var command = new GetByIdOrderQuery() { Id = orderId };
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
+            => Ok(await _mediator.Send(new GetByIdOrderQuery() { Id = orderId }));
     }
-
 }

@@ -1,57 +1,69 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using QDryClean.Api.ViewModels;
 using QDryClean.Application.Absreactions;
 using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Application.Common.Pagination;
 using QDryClean.Application.Common.Responses;
-using QDryClean.Application.Dtos;
 using QDryClean.Application.UseCases.Orders.Queries;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
-    public class GetAllOrdersCommandHandler : CommandHandlerBase, IRequestHandler<GetAllOrdersQuery, ApiResponse<PagedResult<OrderDto>>>
+    public class GetAllOrdersCommandHandler : CommandHandlerBase, IRequestHandler<GetAllOrdersQuery, ApiResponse<PagedResult<OrderViewModel>>>
     {
         public GetAllOrdersCommandHandler(
            IApplicationDbContext applicationDbContext,
            ICurrentUserService currentUserService,
            IMapper mapper) : base(applicationDbContext, currentUserService, mapper) { }
-        public async Task<ApiResponse<PagedResult<OrderDto>>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<PagedResult<OrderViewModel>>> Handle(
+            GetAllOrdersQuery request,
+            CancellationToken cancellationToken)
         {
-            var baseQuery = _applicationDbContext.Orders
+            var query = _applicationDbContext.Orders
+                .AsNoTracking()
                 .Where(x => x.DeletedAt == null && x.DeletedBy == null)
-                .AsNoTracking();
+                .Include(o => o.Customer)
+                .Include(o => o.Items)
+                .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(request.Search))
             {
                 var s = request.Search.Trim();
-                var sLower = s.ToLower();
-
-                // если это число — расширяем поиск по числовым полям
                 var isNumber = int.TryParse(s, out var n);
 
-                baseQuery = baseQuery.Where(o =>
-                    (isNumber && (o.Id == n || o.ReceiptNumber == n || o.CustomerId == n)) ||
-                    // текстовый поиск (пример)
-                    o.Notes.Any(note => note.ToLower().Contains(sLower))
-                // если есть связанный Customer:
-                // || o.Customer.FullName.ToLower().Contains(sLower)
+                // Для SQL Server Like нечувствителен к регистру при CI collation (обычно так и есть)
+                var like = $"%{s}%";
+
+                query = query.Where(o =>
+                    (isNumber && (o.Id == n || o.ReceiptNumber == n)) ||
+                    o.Customer.FirstName != null && EF.Functions.Like(o.Customer.FirstName, like) ||
+                    o.Customer.LastName != null && EF.Functions.Like(o.Customer.LastName, like) ||
+                    o.Notes.Any(note => EF.Functions.Like(note, like))
                 );
             }
 
-            var pagedResult = await baseQuery
-                .AsNoTracking()
-                .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
-                .OrderByDescending(c => c.Id)
-                .ToPagedResultAsync(
-                    request.Page,
-                    request.PageSize,
-                    cancellationToken
-                );
+            var totalCount = await query.CountAsync(cancellationToken);
 
-            return ApiResponseFactory.Ok(pagedResult);
+            var items = await query
+                .OrderByDescending(o => o.ReceiptNumber)
+                .Select(o => new OrderViewModel
+                {
+                    Id = o.Id,
+                    CustomerName = (o.Customer.LastName + " " ?? "") + (o.Customer.FirstName ?? ""),
+                    ReceiptNumber = o.ReceiptNumber,
+                    ProcessStatus = o.ProcessStatus,
+                    ExpectedCompletionDate = o.ExpectedCompletionDate,
+                    CreatedAt = DateOnly.FromDateTime(o.CreatedAt),
+                    ItemsCount = o.Items.Count(),
+                    Notes = o.Notes
+                })
+                .ToPagedResultAsync(
+                request.Page,
+                request.PageSize,
+                cancellationToken);
+
+            return ApiResponseFactory.Ok(items);
         }
     }
 }
