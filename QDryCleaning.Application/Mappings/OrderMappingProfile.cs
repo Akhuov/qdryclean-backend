@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using QDryClean.Api.ViewModels;
 using QDryClean.Application.Dtos;
 using QDryClean.Application.UseCases.Orders.Commands;
 using QDryClean.Domain.Entities;
@@ -10,8 +11,9 @@ namespace QDryClean.Application.Mappings
         public OrderMappingProfile()
         {
             CreateMap<Order, OrderDto>();
-
+            
             CreateMap<CreateOrderCommand, OrderDto>().ReverseMap();
+            CreateMap<CreateOrderCommand, OrderViewModel>().ReverseMap();
 
             CreateMap<CreateOrderCommand, Order>()
                 .ForMember(dest => dest.ReceiptNumber, opt => opt.Ignore())
@@ -28,6 +30,11 @@ namespace QDryClean.Application.Mappings
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+
+            CreateMap<CreateOrderItemDto, Item>()
+                .ForMember(d => d.ItemType, opt => opt.Ignore())
+                .ForMember(d => d.Order, opt => opt.Ignore())
+                .ForMember(d => d.OrderId, opt => opt.Ignore());
         }
     }
 }

@@ -19,18 +19,29 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
         {
             var order = _mapper.Map<Order>(request);
 
-            // Set additional properties
-            order.ExpectedCompletionDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(request.DaysToCompletion ?? 3));
+            order.ExpectedCompletionDate =
+                DateOnly.FromDateTime(DateTime.UtcNow.AddDays(request.DaysToCompletion ?? 3));
             order.CreatedBy = _currentUserService.UserId;
             order.CreatedAt = DateTime.UtcNow;
 
-            if (request.Note != null)
-            {
+            if (!string.IsNullOrWhiteSpace(request.Note))
                 order.Notes.Add(request.Note);
+
+            // 1) замаппили items (ItemType/Order/OrderId игнорируются профилем)
+            var items = _mapper.Map<List<Item>>(request.Items);
+
+            // 2) связали items с order
+            foreach (var item in items)
+            {
+                item.Order = order;
             }
+
+            // 3) положили в заказ
+            order.Items = items;
 
             await _applicationDbContext.Orders.AddAsync(order, cancellationToken);
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
+
             return ApiResponseFactory.Ok(_mapper.Map<OrderDto>(order));
         }
     }

@@ -4,8 +4,10 @@
     {
         Created = 0,
         Accepted = 1,
-        Completed = 2,
-        Closed = 3,
-        Donated = 4,
+        Ready = 2,
+        Completed = 3,
+        Closed = 4,
+        Canceled = 5,
+        Donated = 6,
     }
 }

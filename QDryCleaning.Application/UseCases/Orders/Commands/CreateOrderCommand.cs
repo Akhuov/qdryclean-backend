@@ -9,5 +9,6 @@ namespace QDryClean.Application.UseCases.Orders.Commands
         public int? DaysToCompletion { get; set; } = null;
         public int CustomerId { get; set; }
         public string? Note { get; set; }
+        public IList<CreateOrderItemDto> Items { get; set; } = new List<CreateOrderItemDto>();
     }
 }

@@ -8,11 +8,9 @@ using Microsoft.OpenApi.Models;
 using QDryClean.Api.Middlewares;
 using QDryClean.Application;
 using QDryClean.Application.Common.Behaviors;
-using QDryClean.Application.Common.Interfaces.Auth;
 using QDryClean.Application.UseCases.Customers.Validators;
 using QDryClean.Infrastructure;
 using QDryClean.Infrastructure.Persistance;
-using QDryClean.Infrastructure.Services.JWT;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
