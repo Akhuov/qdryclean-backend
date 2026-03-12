@@ -19,8 +19,8 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
         {
             var order = _mapper.Map<Order>(request);
 
-            order.ExpectedCompletionDate =
-                DateOnly.FromDateTime(DateTime.UtcNow.AddDays(request.DaysToCompletion ?? 3));
+            order.ExpectedCompletionDate = request.ExpectedCompletionDate ??
+                DateOnly.FromDateTime(DateTime.UtcNow.AddDays(3));
             order.CreatedBy = _currentUserService.UserId;
             order.CreatedAt = DateTime.UtcNow;
 

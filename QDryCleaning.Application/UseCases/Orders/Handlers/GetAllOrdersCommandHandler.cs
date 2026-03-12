@@ -59,9 +59,9 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                     Notes = o.Notes
                 })
                 .ToPagedResultAsync(
-                request.Page,
-                request.PageSize,
-                cancellationToken);
+                    request.Page,
+                    request.PageSize,
+                    cancellationToken);
 
             return ApiResponseFactory.Ok(items);
         }
