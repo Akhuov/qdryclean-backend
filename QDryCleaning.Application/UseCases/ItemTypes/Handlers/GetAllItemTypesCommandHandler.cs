@@ -18,12 +18,18 @@ namespace QDryClean.Application.UseCases.ItemTypes.Handlers
         public async Task<ApiResponse<List<ItemTypeDto>>> Handle(GetAllItemTypesCommand request, CancellationToken cancellationToken)
         {
 
-            var itemTypes = await _applicationDbContext.ItemTypes.ToListAsync();
+            var itemTypes = await _applicationDbContext.ItemTypes.Include(x=> x.Charge).ToListAsync();
 
             var listOfItemTypeDtos = new List<ItemTypeDto>();
             foreach (var itemType in itemTypes)
             {
-                listOfItemTypeDtos.Add(_mapper.Map<ItemTypeDto>(itemType));
+                listOfItemTypeDtos.Add( new ItemTypeDto()
+                {
+                    Id = itemType.Id,
+                    Name = itemType.Name,
+                    Cost = itemType.Charge.Cost
+                }
+                    );
             }
 
             return ApiResponseFactory.Ok(listOfItemTypeDtos);

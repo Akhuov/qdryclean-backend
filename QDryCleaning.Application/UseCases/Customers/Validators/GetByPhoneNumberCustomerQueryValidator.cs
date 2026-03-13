@@ -20,6 +20,11 @@ namespace QDryClean.Application.UseCases.Customers.Validators
                 {
                     var normalizedPhone = phoneNumber.Trim();
 
+                    if (!normalizedPhone.StartsWith("+998"))
+                    {
+                        normalizedPhone = "+998" + normalizedPhone;
+                    }
+
                     return await _dbContext.Customers.AnyAsync(
                         x => x.PhoneNumber == normalizedPhone &&
                              x.DeletedAt == null &&
