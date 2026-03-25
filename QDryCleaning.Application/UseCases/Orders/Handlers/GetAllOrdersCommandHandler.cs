@@ -43,8 +43,6 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                 );
             }
 
-            var totalCount = await query.CountAsync(cancellationToken);
-
             var items = await query
                 .OrderByDescending(o => o.ReceiptNumber)
                 .Select(o => new OrderViewModel

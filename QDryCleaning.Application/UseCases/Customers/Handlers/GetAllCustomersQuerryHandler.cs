@@ -27,7 +27,6 @@ namespace QDryClean.Application.UseCases.Customers.Handlers
                 .AsQueryable();
 
             var pagedResult = await query
-                .AsNoTracking()
                 .OrderBy(c => c.Id)
                 .ProjectTo<CustomerDto>(_mapper.ConfigurationProvider)
                 .ToPagedResultAsync(
