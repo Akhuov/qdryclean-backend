@@ -12,9 +12,6 @@ namespace QDryClean.Application.Common.Validators
     {
         public PagedQueryValidator(IApplicationDbContext dbContext)
         {
-            RuleFor(x => x)
-                .NotNull().WithMessage("Request cannot be null");
-
             RuleFor(x => x.Page)
                 .GreaterThan(0).WithMessage("Page must be greater than 0.");
 
@@ -22,6 +19,8 @@ namespace QDryClean.Application.Common.Validators
                 .GreaterThan(0).WithMessage("PageSize must be greater than 0.");
 
             RuleFor(x => x)
+                .NotNull()
+                    .WithMessage("Request cannot be null")
                 .MustAsync(async (query, cancellationToken) =>
                 {
                     var totalCount = await dbContext.Set<TEntity>()

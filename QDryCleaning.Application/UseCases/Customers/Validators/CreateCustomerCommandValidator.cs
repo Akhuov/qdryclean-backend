@@ -23,16 +23,15 @@ public class CreateCustomerCommandValidator
 
         RuleFor(x => x.PhoneNumber)
             .NotEmpty()
-            .WithMessage("Phone Number is required")
+                .WithMessage("Phone Number is required")
             .Matches(@"^(?:\+998|998)?\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$")
-            .WithMessage("Invalid phone number format")
+                .WithMessage("Invalid phone number format")
             .MustAsync(async (command, phone, cancellationToken) =>
             {
-                phone = PhoneNumberHelper.NormalizePhoneNumber(phone);
                 return !await _dbContext.Customers
                     .AnyAsync(c => c.PhoneNumber == phone, cancellationToken);
             })
-            .WithMessage("Customer with this phone number already exists");
+                .WithMessage("Customer with this phone number already exists");
 
         RuleFor(x => x.AdditionalPhoneNumber)
             .Matches(@"^(?:\+998|998)?\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$")

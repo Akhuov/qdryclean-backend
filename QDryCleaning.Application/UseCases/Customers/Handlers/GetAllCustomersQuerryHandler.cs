@@ -8,6 +8,7 @@ using QDryClean.Application.Common.Pagination;
 using QDryClean.Application.Common.Responses;
 using QDryClean.Application.Dtos;
 using QDryClean.Application.UseCases.Customers.Queries;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace QDryClean.Application.UseCases.Customers.Handlers
 {
@@ -20,15 +21,14 @@ namespace QDryClean.Application.UseCases.Customers.Handlers
 
         public async Task<ApiResponse<PagedResult<CustomerDto>>> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
         {
-            var baseQuery = _applicationDbContext.Customers
+            var query = _applicationDbContext.Customers
+                .AsNoTracking()
                 .Where(x => x.DeletedAt == null && x.DeletedBy == null)
-                .AsNoTracking()
-                .OrderBy(x => x.Id)
-                .ProjectTo<CustomerDto>(_mapper.ConfigurationProvider);
+                .AsQueryable();
 
-            var pagedResult = await baseQuery
-                .AsNoTracking()
+            var pagedResult = await query
                 .OrderBy(c => c.Id)
+                .ProjectTo<CustomerDto>(_mapper.ConfigurationProvider)
                 .ToPagedResultAsync(
                     request.Page,
                     request.PageSize,

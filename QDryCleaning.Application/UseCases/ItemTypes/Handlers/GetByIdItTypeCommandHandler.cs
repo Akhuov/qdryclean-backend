@@ -17,8 +17,13 @@ namespace QDryClean.Application.UseCases.ItemTypes.Handlers
             IMapper mapper) : base(applicationDbContext, currentUserService, mapper) { }
         public async Task<ApiResponse<ItemTypeDto>> Handle(GetByIdItemTypeCommand request, CancellationToken cancellationToken)
         {
-            var itemType = await _applicationDbContext.ItemTypes.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
-            return ApiResponseFactory.Ok(_mapper.Map<ItemTypeDto>(itemType));
+            var itemType = await _applicationDbContext.ItemTypes.Include(x=>x.Charge).FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
+            return ApiResponseFactory.Ok(new ItemTypeDto() 
+            { 
+                Id = itemType.Id,
+                Name = itemType.Name,
+                Cost = itemType.Charge.Cost
+            });
         }
     }
 }

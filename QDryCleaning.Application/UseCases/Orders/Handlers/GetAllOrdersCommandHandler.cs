@@ -43,8 +43,6 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                 );
             }
 
-            var totalCount = await query.CountAsync(cancellationToken);
-
             var items = await query
                 .OrderByDescending(o => o.ReceiptNumber)
                 .Select(o => new OrderViewModel
@@ -59,9 +57,9 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                     Notes = o.Notes
                 })
                 .ToPagedResultAsync(
-                request.Page,
-                request.PageSize,
-                cancellationToken);
+                    request.Page,
+                    request.PageSize,
+                    cancellationToken);
 
             return ApiResponseFactory.Ok(items);
         }

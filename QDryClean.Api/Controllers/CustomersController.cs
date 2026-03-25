@@ -48,7 +48,10 @@ namespace QDryClean.Api.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10)
         {
-            var result = await _mediator.Send(new GetAllCustomersQuery() { Page = page, PageSize = pageSize});
+            var result = await _mediator.Send(
+                new GetAllCustomersQuery() {
+                    Page = page, 
+                    PageSize = pageSize });
             return Ok(result);
         }
 
@@ -56,6 +59,13 @@ namespace QDryClean.Api.Controllers
         public async Task<IActionResult> GetByIdCustomerAsync(int customerId)
         {
             var result = await _mediator.Send(new GetByIdCustomerQuery() { Id = customerId });
+            return Ok(result);
+        }
+
+        [HttpGet("by-phone/{phoneNumber}")]
+        public async Task<IActionResult> GetByIdCustomerAsync(string phoneNumber)
+        {
+            var result = await _mediator.Send(new GetByPhoneNumberCustomerQuery() { PhoneNumber = phoneNumber });
             return Ok(result);
         }
     }
