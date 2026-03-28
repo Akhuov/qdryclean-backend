@@ -6,7 +6,7 @@ using QDryClean.Application.UseCases.Orders.Commands;
 namespace QDryClean.Application.UseCases.Orders.Validators
 {
     public class SoftDeleteOrderCommandValidator
-        : AbstractValidator<DeleteOrderCommand>
+        : AbstractValidator<SoftDeleteOrderCommand>
     {
         private readonly IApplicationDbContext _dbContext;
         public SoftDeleteOrderCommandValidator(IApplicationDbContext dbContext)

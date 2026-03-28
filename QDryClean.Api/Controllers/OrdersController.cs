@@ -27,8 +27,8 @@ namespace QDryClean.Api.Controllers
 
 
         [HttpDelete("{orderId:int}")]
-        public async Task<IActionResult> DeleteOrderAsync(DeleteOrderCommand command)
-            => Ok(await _mediator.Send(command));
+        public async Task<IActionResult> DeleteOrderAsync(int orderId)
+            => Ok(await _mediator.Send(new SoftDeleteOrderCommand() {Id = orderId}));
 
 
         [HttpPut("{orderId:int}")]

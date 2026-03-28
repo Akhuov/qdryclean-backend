@@ -47,7 +47,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                 .Select(o => new OrderViewModel
                 {
                     Id = o.Id,
-                    CustomerName = (o.Customer.FullName + " " ?? "") + (o.Customer.FullName ?? ""),
+                    CustomerName = o.Customer.FullName,
                     ReceiptNumber = o.ReceiptNumber,
                     ProcessStatus = o.ProcessStatus,
                     ExpectedCompletionDate = o.ExpectedCompletionDate,
