@@ -21,8 +21,7 @@ namespace QDryClean.Application.UseCases.Customers.Handlers
         {
             var customer = await _applicationDbContext.Customers.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
 
-            customer.FirstName = request.FirstName;
-            customer.LastName = request.LastName;
+            customer.FullName = request.FirstName;
             customer.PhoneNumber = PhoneNumberHelper.NormalizePhoneNumber(request.PhoneNumber);
             customer.AdditionalPhoneNumber = PhoneNumberHelper.NormalizePhoneNumber(request.AdditionalPhoneNumber);
             customer.Points = request.Points;

@@ -37,8 +37,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
 
                 query = query.Where(o =>
                     (isNumber && (o.Id == n || o.ReceiptNumber == n)) ||
-                    o.Customer.FirstName != null && EF.Functions.Like(o.Customer.FirstName, like) ||
-                    o.Customer.LastName != null && EF.Functions.Like(o.Customer.LastName, like) ||
+                    o.Customer.FullName != null && EF.Functions.Like(o.Customer.FullName, like) ||
                     o.Notes.Any(note => EF.Functions.Like(note, like))
                 );
             }
@@ -48,7 +47,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                 .Select(o => new OrderViewModel
                 {
                     Id = o.Id,
-                    CustomerName = (o.Customer.LastName + " " ?? "") + (o.Customer.FirstName ?? ""),
+                    CustomerName = (o.Customer.FullName + " " ?? "") + (o.Customer.FullName ?? ""),
                     ReceiptNumber = o.ReceiptNumber,
                     ProcessStatus = o.ProcessStatus,
                     ExpectedCompletionDate = o.ExpectedCompletionDate,
