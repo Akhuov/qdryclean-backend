@@ -7,6 +7,7 @@ using QDryClean.Domain.Enums;
 
 namespace QDryClean.Api.Controllers
 {
+    [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
     [Route("api/v1/orders")]
     [ApiController]
     public class OrdersController : ControllerBase
@@ -20,19 +21,16 @@ namespace QDryClean.Api.Controllers
         }
 
 
-        [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
         [HttpPost]
         public async Task<IActionResult> CreateOrderAsync(CreateOrderCommand command)
             => Created("Order created successfully.", await _mediator.Send(command));
 
 
-        [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
         [HttpDelete("{orderId:int}")]
         public async Task<IActionResult> DeleteOrderAsync(DeleteOrderCommand command)
             => Ok(await _mediator.Send(command));
 
 
-        [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
         [HttpPut("{orderId:int}")]
         public async Task<IActionResult> UpdateOrderAsync(int orderId, [FromBody] UpdateOrderCommand command)
         {

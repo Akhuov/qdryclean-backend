@@ -8,10 +8,12 @@ using Microsoft.OpenApi.Models;
 using QDryClean.Api.Middlewares;
 using QDryClean.Application;
 using QDryClean.Application.Common.Behaviors;
+using QDryClean.Application.Common.Responses;
 using QDryClean.Application.UseCases.Customers.Validators;
 using QDryClean.Infrastructure;
 using QDryClean.Infrastructure.Persistance;
 using System.Text;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,7 +82,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"],
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+
+            ClockSkew = TimeSpan.Zero
         };
     });
 

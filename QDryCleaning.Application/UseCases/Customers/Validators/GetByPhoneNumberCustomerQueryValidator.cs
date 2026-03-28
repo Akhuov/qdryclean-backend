@@ -15,23 +15,7 @@ namespace QDryClean.Application.UseCases.Customers.Validators
             _dbContext = dbContext;
             RuleFor(x => x.PhoneNumber)
                 .NotEmpty()
-                .WithMessage("Phone number is required")
-                .MustAsync(async (phoneNumber, cancellationToken) =>
-                {
-                    var normalizedPhone = phoneNumber.Trim();
-
-                    if (!normalizedPhone.StartsWith("+998"))
-                    {
-                        normalizedPhone = "+998" + normalizedPhone;
-                    }
-
-                    return await _dbContext.Customers.AnyAsync(
-                        x => x.PhoneNumber == normalizedPhone &&
-                             x.DeletedAt == null &&
-                             x.DeletedBy == null,
-                        cancellationToken);
-                })
-                .WithMessage("Customer with this phone number does not exist");
+                .WithMessage("Phone number is required");
         }
     }
 }
