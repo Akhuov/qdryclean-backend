@@ -22,7 +22,7 @@ namespace QDryClean.Application.UseCases.Customers.Validators
                 })
                 .WithMessage("Customer with this Id does not exist");
 
-            RuleFor(x => x.FirstName)
+            RuleFor(x => x.FullName)
                 .NotEmpty().WithMessage("First name is required.")
                 .MaximumLength(50);
 

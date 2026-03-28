@@ -14,7 +14,7 @@ public class CreateCustomerCommandValidator
     {
         _dbContext = dbContext;
 
-        RuleFor(x => x.FirstName)
+        RuleFor(x => x.FullName)
             .Cascade(CascadeMode.Stop)
             .NotNull()
                 .WithMessage("First Name is required")

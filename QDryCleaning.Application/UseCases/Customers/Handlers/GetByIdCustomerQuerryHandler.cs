@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using QDryClean.Application.Absreactions;
+using QDryClean.Application.Common.Exceptions;
 using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Application.Common.Responses;
 using QDryClean.Application.Dtos;
@@ -19,7 +20,10 @@ namespace QDryClean.Application.UseCases.Customers.Handlers
         public async Task<ApiResponse<CustomerDto>> Handle(GetByIdCustomerQuery request, CancellationToken cancellationToken)
         {
             var customer = await _applicationDbContext.Customers.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-            return ApiResponseFactory.Ok(_mapper.Map<CustomerDto>(customer));
+
+            return customer == null
+                ? throw new NotFoundException("Customer with this ID does not exist")
+                : ApiResponseFactory.Ok(_mapper.Map<CustomerDto>(customer));
         }
     }
 }
