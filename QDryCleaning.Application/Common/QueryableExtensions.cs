@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+using QDryClean.Application.Common.Interfaces;
+using QDryClean.Domain;
 
 namespace QDryClean.Application.Common.Pagination
 {
@@ -47,6 +48,12 @@ namespace QDryClean.Application.Common.Pagination
                 Page = page,
                 PageSize = pageSize
             };
+        }
+
+        public static IQueryable<T> WhereNotDeleted<T>(this IQueryable<T> query)
+        where T : Auditable
+        {
+            return query.Where(x => x.DeletedAt == null && x.DeletedBy == null);
         }
     }
 

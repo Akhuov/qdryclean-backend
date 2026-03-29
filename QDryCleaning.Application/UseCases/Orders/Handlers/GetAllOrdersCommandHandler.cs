@@ -22,7 +22,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
         {
             var query = _applicationDbContext.Orders
                 .AsNoTracking()
-                .Where(x => x.DeletedAt == null && x.DeletedBy == null)
+                .WhereNotDeleted()
                 .Include(o => o.Customer)
                 .Include(o => o.Items)
                 .AsQueryable();
