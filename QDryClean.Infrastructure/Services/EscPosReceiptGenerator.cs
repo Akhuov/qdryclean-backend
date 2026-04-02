@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using QDryClean.Application.Absreactions;
+﻿using QDryClean.Application.Absreactions;
 using QDryClean.Application.Common.Helpers;
 using QDryClean.Application.Common.Interfaces.Services;
+using QDryClean.Domain.Entities;
 using System.Text;
 
 namespace QDryClean.Infrastructure.Services
@@ -9,30 +9,15 @@ namespace QDryClean.Infrastructure.Services
     public class EscPosReceiptGenerator : IReceiptGenerator
     {
         private readonly ICurrentUserService _currentUserService;
-        private readonly IApplicationDbContext _dbContext;
         private readonly IQrCodeService _qrService;
         public EscPosReceiptGenerator(ICurrentUserService currentUserService, IApplicationDbContext dbContext, IQrCodeService qrService)
         {
             _currentUserService = currentUserService;
-            _dbContext = dbContext;
             _qrService = qrService;
         }
-        public async Task<byte[]> GenerateEscPos(int invoiceId)
+        public async Task<byte[]> GenerateEscPos(Invoice invoice)
         {
-            var cashier = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == _currentUserService.UserId);
-            var cashierName = cashier != null ? $"{cashier.FirstName} {cashier.LastName}" : "Unknown";
-            var invoiceWithOrderItems = await _dbContext.OrderInvoices
-                .AsNoTracking()
-                .Where(i => i.Id == invoiceId)
-                // Подгружаем заказ и его товары
-                .Include(i => i.Order)
-                    .ThenInclude(o => o.Items)
-                // Подгружаем тип товара и его Charge
-                .Include(i => i.Order)
-                    .ThenInclude(o => o.Items)
-                        .ThenInclude(oi => oi.ItemType)
-                            .ThenInclude(it => it.Charge)
-                .FirstOrDefaultAsync();
+            var cashier = _currentUserService.UserId;
 
             var builder = new List<byte>();
 
@@ -57,10 +42,10 @@ namespace QDryClean.Infrastructure.Services
             Command(0x1B, 0x61, 0x00);
             Write($"Адрес: Test Address\n");
             Write($"Дата: {DateTime.UtcNow:dd.MM.yyyy HH:mm}\n");
-            Write($"Кассир: {cashierName}\n");
+            Write($"Кассир: {cashier}\n");
             Write("--------------------------------\n");
 
-            foreach (var item in invoiceWithOrderItems.Order.Items)
+            foreach (var item in invoice.Order.Items)
             {
                 Write($"{item.BrandName}\n");
                 Write($"{item.ItemType.Charge.Cost}\n");
@@ -70,13 +55,13 @@ namespace QDryClean.Infrastructure.Services
 
             // Жирный текст
             Command(0x1B, 0x45, 0x01);
-            Write($"ИТОГО: {invoiceWithOrderItems.TotalCost}\n");
+            Write($"ИТОГО: {invoice.TotalCost}\n");
             Command(0x1B, 0x45, 0x00);
 
             Write("\n");
 
             // QR-код
-            var qrBytes = _qrService.GenerateQrCode($"{invoiceWithOrderItems.Order.ReceiptNumber}"); // или другой контент
+            var qrBytes = _qrService.GenerateQrCode($"{invoice.Order.ReceiptNumber}"); // или другой контент
             var escPosQr = EscPosQrHelper.ConvertQrToEscPos(qrBytes);
             builder.AddRange(escPosQr);
             Command(0x1B, 0x61, 0x00);
