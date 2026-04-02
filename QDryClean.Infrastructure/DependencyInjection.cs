@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using QDryClean.Application.Absreactions;
 using QDryClean.Application.Common.Interfaces.Auth;
 using QDryClean.Application.Common.Interfaces.Services;
+using QDryClean.Application.Common.Services;
 using QDryClean.Infrastructure.Persistance;
 using QDryClean.Infrastructure.Services;
 using QDryClean.Infrastructure.Services.JWT;
@@ -28,6 +29,7 @@ namespace QDryClean.Infrastructure
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IQrCodeService, QrCodeService>();
             services.AddScoped<IBarCodeService, BarCodeService>();
+            services.AddScoped<IInvoiceFactory, InvoiceFactory>();
 
             return services;
         }
