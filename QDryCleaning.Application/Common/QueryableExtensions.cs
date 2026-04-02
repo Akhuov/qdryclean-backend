@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using QDryClean.Application.Common.Interfaces;
 using QDryClean.Domain;
 
 namespace QDryClean.Application.Common.Pagination

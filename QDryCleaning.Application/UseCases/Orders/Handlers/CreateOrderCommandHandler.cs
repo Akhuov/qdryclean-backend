@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using QDryClean.Application.Absreactions;
 using QDryClean.Application.Common.Interfaces.Services;
+using QDryClean.Application.Common.Pagination;
 using QDryClean.Application.Common.Responses;
 using QDryClean.Application.Dtos;
 using QDryClean.Application.UseCases.Orders.Commands;
@@ -11,12 +13,28 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
 {
     public class CreateOrderCommandHandler : CommandHandlerBase, IRequestHandler<CreateOrderCommand, ApiResponse<OrderDto>>
     {
+        private readonly IInvoiceFactory _invoiceFactory;
         public CreateOrderCommandHandler(
            IApplicationDbContext applicationDbContext,
+           IInvoiceFactory invoiceFactory,
            ICurrentUserService currentUserService,
-           IMapper mapper) : base(applicationDbContext, currentUserService, mapper) { }
+           IMapper mapper) : base(applicationDbContext, currentUserService, mapper)
+        {
+            _invoiceFactory = invoiceFactory;
+        }
         public async Task<ApiResponse<OrderDto>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
+            var itemTypeIds = request.Items
+               .Select(x => x.ItemTypeId)
+               .Distinct()
+               .ToList();
+
+            var itemTypes = await _applicationDbContext.ItemTypes
+                .Where(x => itemTypeIds.Contains(x.Id))
+                .WhereNotDeleted()
+                .Include(x => x.Charge)
+                .ToListAsync(cancellationToken);
+
             var order = _mapper.Map<Order>(request);
 
             order.ExpectedCompletionDate = request.ExpectedCompletionDate ??
@@ -39,7 +57,10 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
             // 3) положили в заказ
             order.Items = items;
 
+            var invoice = _invoiceFactory.Create(order, itemTypes);
+
             await _applicationDbContext.Orders.AddAsync(order, cancellationToken);
+            await _applicationDbContext.OrderInvoices.AddAsync(invoice, cancellationToken);
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
             return ApiResponseFactory.Ok(_mapper.Map<OrderDto>(order));
