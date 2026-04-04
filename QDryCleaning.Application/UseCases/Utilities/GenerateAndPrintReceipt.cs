@@ -1,4 +1,5 @@
 ﻿using QDryClean.Application.Common.Interfaces.Services;
+using QDryClean.Domain.Entities;
 
 namespace QDryClean.Application.UseCases.Utilities
 {
@@ -15,9 +16,9 @@ namespace QDryClean.Application.UseCases.Utilities
             _printer = printer;
         }
 
-        public async Task Execute(int invoiceId)
+        public async Task Execute(Invoice invoice)
         {
-            var escPosData = await _generator.GenerateEscPos(invoiceId);
+            var escPosData = await _generator.GenerateEscPos(invoice);
             _printer.PrintRaw(escPosData);
         }
     }

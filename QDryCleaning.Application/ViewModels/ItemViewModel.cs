@@ -1,9 +1,11 @@
-﻿namespace QDryClean.Application.Dtos
+﻿using QDryClean.Application.Dtos;
+
+namespace QDryClean.Application.ViewModels
 {
-    public class ItemDto
+    public class ItemViewModel
     {
         public int Id { get; set; }
-        public string ItemTypeName { get; set; }
+        public ItemTypeDto ItemType { get; set; }
         public string? Colour { get; set; }
         public string? BrandName { get; set; }
         public string? Description { get; set; }

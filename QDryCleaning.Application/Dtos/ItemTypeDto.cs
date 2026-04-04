@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace QDryClean.Application.Dtos
+﻿namespace QDryClean.Application.Dtos
 {
     public class ItemTypeDto
     {

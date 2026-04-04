@@ -9,17 +9,13 @@ namespace QDryClean.Application.Mappings
     {
         public ItemTypeMappingProfile()
         {
-            CreateMap<ItemType, ItemTypeDto>();
+            CreateMap<ItemTypeDto, ItemType>();
+            CreateMap<ItemType, ItemTypeDto>()
+                .ForMember(d => d.Cost, opt => opt.MapFrom(s => s.Charge != null ? s.Charge.Cost : 0)); ;
+
             CreateMap<ItemTypeDto, CreateItemTypeCommand>().ReverseMap();
 
             CreateMap<CreateItemTypeCommand, ItemType>()
-                    .ForMember(dest => dest.Items, opt => opt.Ignore())
-                    .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
-                    .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
-                    .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())
-                    .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
-
-            CreateMap<ItemTypeDto, ItemType>()
                     .ForMember(dest => dest.Items, opt => opt.Ignore())
                     .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
                     .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())

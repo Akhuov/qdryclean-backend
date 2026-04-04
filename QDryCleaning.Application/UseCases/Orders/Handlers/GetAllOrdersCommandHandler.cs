@@ -6,6 +6,7 @@ using QDryClean.Application.Absreactions;
 using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Application.Common.Pagination;
 using QDryClean.Application.Common.Responses;
+using QDryClean.Application.Dtos;
 using QDryClean.Application.UseCases.Orders.Queries;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
@@ -23,8 +24,6 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
             var query = _applicationDbContext.Orders
                 .AsNoTracking()
                 .WhereNotDeleted()
-                .Include(o => o.Customer)
-                .Include(o => o.Items)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(request.Search))
@@ -47,13 +46,18 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                 .Select(o => new OrderViewModel
                 {
                     Id = o.Id,
-                    CustomerName = o.Customer.FullName,
+                    Customer = new CustomerDto
+                    {
+                        Id = o.Customer.Id,
+                        FullName = o.Customer.FullName,
+                        PhoneNumber = o.Customer.PhoneNumber
+                    },
                     ReceiptNumber = o.ReceiptNumber,
                     ProcessStatus = o.ProcessStatus,
                     ExpectedCompletionDate = o.ExpectedCompletionDate,
                     CreatedAt = DateOnly.FromDateTime(o.CreatedAt),
-                    ItemsCount = o.Items.Count(),
-                    Notes = o.Notes
+                    TotalCost = o.Invoice.TotalCost,
+                    ItemsCount = o.Items.Count()
                 })
                 .ToPagedResultAsync(
                     request.Page,

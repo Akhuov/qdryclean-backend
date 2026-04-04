@@ -1,12 +1,11 @@
-﻿
-using QDryClean.Domain.Enums;
+﻿using QDryClean.Domain.Enums;
 
-namespace QDryClean.Application.Dtos
+namespace QDryClean.Application.Dtos.Orders
 {
     public class OrderDto
     {
         public int Id { get; set; }
-        public int customerId { get; set; }
+        public int CustomerId { get; set; }
         public int ReceiptNumber { get; set; }
         public ProcessStatus ProcessStatus { get; set; }
         public DateOnly ExpectedCompletionDate { get; set; }

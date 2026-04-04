@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using QDryClean.Application.Common.Responses;
-using QDryClean.Application.Dtos;
+using QDryClean.Application.Dtos.Orders;
 using QDryClean.Domain.Enums;
 using System.Text.Json.Serialization;
 
