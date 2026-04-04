@@ -62,6 +62,7 @@ namespace QDryClean.Infrastructure.Services
 
             // QR-код
             var qrBytes = _qrService.GenerateQrCode($"{invoice.Order.ReceiptNumber}"); // или другой контент
+
             var escPosQr = EscPosQrHelper.ConvertQrToEscPos(qrBytes);
             builder.AddRange(escPosQr);
             Command(0x1B, 0x61, 0x00);

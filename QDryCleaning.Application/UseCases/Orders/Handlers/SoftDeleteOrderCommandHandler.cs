@@ -17,13 +17,15 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
         public async Task<ApiResponse<Unit>> Handle(SoftDeleteOrderCommand request, CancellationToken cancellationToken)
         {
 
-            var order = await _applicationDbContext.Orders.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
+            var order = await _applicationDbContext.Orders
+                .FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
 
             order.DeletedAt = DateTime.UtcNow;
             order.DeletedBy = _currentUserService.UserId;
 
             _applicationDbContext.Orders.Update(order);
-            await _applicationDbContext.SaveChangesAsync(cancellationToken);
+            await _applicationDbContext
+                .SaveChangesAsync(cancellationToken);
             return ApiResponseFactory.Ok(Unit.Value);
         }
     }

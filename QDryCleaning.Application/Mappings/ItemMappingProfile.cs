@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using QDryClean.Application.Dtos;
 using QDryClean.Application.UseCases.Items.Commands;
+using QDryClean.Application.ViewModels;
 using QDryClean.Domain.Entities;
 
 namespace QDryClean.Application.Mappings
@@ -9,7 +10,9 @@ namespace QDryClean.Application.Mappings
     {
         public ItemMappingProfile()
         {
-            CreateMap<Item, ItemDto>();
+            CreateMap<Item, ItemDto>().ReverseMap();
+            CreateMap<ItemDto, ItemViewModel>().ReverseMap();
+
             CreateMap<CreateItemCommand, Item>()
                 .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())

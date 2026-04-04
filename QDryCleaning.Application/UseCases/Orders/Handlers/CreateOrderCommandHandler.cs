@@ -5,7 +5,7 @@ using QDryClean.Application.Absreactions;
 using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Application.Common.Pagination;
 using QDryClean.Application.Common.Responses;
-using QDryClean.Application.Dtos;
+using QDryClean.Application.Dtos.Orders;
 using QDryClean.Application.UseCases.Orders.Commands;
 using QDryClean.Domain.Entities;
 
@@ -40,7 +40,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
             order.ExpectedCompletionDate = request.ExpectedCompletionDate ??
                 DateOnly.FromDateTime(DateTime.UtcNow.AddDays(3));
             order.CreatedBy = _currentUserService.UserId;
-            order.CreatedAt = DateTime.UtcNow;
+            order.CreatedAt = DateTime.Now;
 
             if (!string.IsNullOrWhiteSpace(request.Note))
                 order.Notes.Add(request.Note);
@@ -62,8 +62,6 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
             await _applicationDbContext.Orders.AddAsync(order, cancellationToken);
             await _applicationDbContext.OrderInvoices.AddAsync(invoice, cancellationToken);
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
-
-
 
             return ApiResponseFactory.Ok(_mapper.Map<OrderDto>(order));
         }

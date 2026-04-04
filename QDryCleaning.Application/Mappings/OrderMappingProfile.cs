@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using QDryClean.Api.ViewModels;
 using QDryClean.Application.Dtos;
+using QDryClean.Application.Dtos.Orders;
 using QDryClean.Application.UseCases.Orders.Commands;
 using QDryClean.Domain.Entities;
 
