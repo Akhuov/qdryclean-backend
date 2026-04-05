@@ -4,18 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using QDryClean.Application.Absreactions;
 using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Application.Common.Responses;
-using QDryClean.Application.Dtos.Orders;
 using QDryClean.Application.UseCases.Orders.Commands;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
-    public class UpdateOrderCommandHandler : CommandHandlerBase, IRequestHandler<UpdateOrderCommand, ApiResponse<OrderDto>>
+    public class PatchOrderCommandHandler : CommandHandlerBase, IRequestHandler<PatchOrderCommand, ApiResponse<Unit>>
     {
-        public UpdateOrderCommandHandler(
+        public PatchOrderCommandHandler(
             IApplicationDbContext applicationDbContext,
             ICurrentUserService currentUserService,
             IMapper mapper) : base(applicationDbContext, currentUserService, mapper) { }
-        public async Task<ApiResponse<OrderDto>> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<Unit>> Handle(PatchOrderCommand request, CancellationToken cancellationToken)
         {
 
             var order = await _applicationDbContext.Orders
@@ -33,7 +32,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                 .Update(order);
             await _applicationDbContext
                 .SaveChangesAsync(cancellationToken);
-            return ApiResponseFactory.Ok(_mapper.Map<OrderDto>(order));
+            return ApiResponseFactory.Ok(Unit.Value);
         }
     }
 

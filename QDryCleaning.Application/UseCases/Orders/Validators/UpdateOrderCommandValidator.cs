@@ -6,7 +6,7 @@ using QDryClean.Application.UseCases.Orders.Commands;
 namespace QDryClean.Application.UseCases.Orders.Validators
 {
     public class UpdateOrderCommandValidator
-        : AbstractValidator<UpdateOrderCommand>
+        : AbstractValidator<PatchOrderCommand>
     {
         private readonly IApplicationDbContext _dbContext;
 
