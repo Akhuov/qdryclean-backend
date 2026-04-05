@@ -31,8 +31,8 @@ namespace QDryClean.Api.Controllers
             => Ok(await _mediator.Send(new SoftDeleteOrderCommand() {Id = orderId}));
 
 
-        [HttpPut("{orderId:int}")]
-        public async Task<IActionResult> UpdateOrderAsync(int orderId, [FromBody] UpdateOrderCommand command)
+        [HttpPatch("{orderId:int}")]
+        public async Task<IActionResult> PatchOrderAsync(int orderId, [FromBody] PatchOrderCommand command)
         {
             command.Id = orderId;
             var result = await _mediator.Send(command);

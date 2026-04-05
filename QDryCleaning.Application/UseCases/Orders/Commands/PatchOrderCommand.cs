@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace QDryClean.Application.UseCases.Orders.Commands
 {
-    public class UpdateOrderCommand : IRequest<ApiResponse<OrderDto>>
+    public class PatchOrderCommand : IRequest<ApiResponse<Unit>>
     {
         [JsonIgnore]
         public int Id { get; set; }
