@@ -55,7 +55,8 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                     {
                         Id = o.Customer.Id,
                         FullName = o.Customer.FullName,
-                        PhoneNumber = o.Customer.PhoneNumber
+                        PhoneNumber = o.Customer.PhoneNumber,
+                        AdditionalPhoneNumber = o.Customer.AdditionalPhoneNumber
                     },
                     ReceiptNumber = o.ReceiptNumber,
                     Status = o.Status,
