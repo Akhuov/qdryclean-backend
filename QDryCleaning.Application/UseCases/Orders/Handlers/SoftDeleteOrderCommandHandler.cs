@@ -5,6 +5,7 @@ using QDryClean.Application.Absreactions;
 using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Application.Common.Responses;
 using QDryClean.Application.UseCases.Orders.Commands;
+using QDryClean.Domain.Enums;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
@@ -20,6 +21,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
             var order = await _applicationDbContext.Orders
                 .FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
 
+            order.Status = OrderStatus.Canceled;
             order.DeletedAt = DateTime.UtcNow;
             order.DeletedBy = _currentUserService.UserId;
 

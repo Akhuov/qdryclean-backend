@@ -41,8 +41,13 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                 );
             }
 
+            if (request.Status.HasValue)
+            {
+                query = query.Where(o => o.Status == request.Status);
+            }
+
             var items = await query
-                .OrderByDescending(o => o.ReceiptNumber)
+                .OrderByDescending(o => o.CreatedAt)
                 .Select(o => new OrderViewModel
                 {
                     Id = o.Id,
@@ -53,7 +58,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                         PhoneNumber = o.Customer.PhoneNumber
                     },
                     ReceiptNumber = o.ReceiptNumber,
-                    ProcessStatus = o.ProcessStatus,
+                    Status = o.Status,
                     ExpectedCompletionDate = o.ExpectedCompletionDate,
                     CreatedAt = DateOnly.FromDateTime(o.CreatedAt),
                     TotalCost = o.Invoice.TotalCost,

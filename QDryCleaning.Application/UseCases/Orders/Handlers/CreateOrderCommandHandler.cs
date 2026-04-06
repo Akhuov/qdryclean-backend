@@ -8,6 +8,7 @@ using QDryClean.Application.Common.Responses;
 using QDryClean.Application.Dtos.Orders;
 using QDryClean.Application.UseCases.Orders.Commands;
 using QDryClean.Domain.Entities;
+using QDryClean.Domain.Enums;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
@@ -39,6 +40,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
 
             order.ExpectedCompletionDate = request.ExpectedCompletionDate ??
                 DateOnly.FromDateTime(DateTime.UtcNow.AddDays(3));
+            order.Status = OrderStatus.Created;
             order.CreatedBy = _currentUserService.UserId;
             order.CreatedAt = DateTime.Now;
 

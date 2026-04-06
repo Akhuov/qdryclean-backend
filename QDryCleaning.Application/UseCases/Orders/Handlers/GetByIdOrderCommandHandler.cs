@@ -34,7 +34,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                         PhoneNumber = o.Customer.PhoneNumber
                     },
                     ReceiptNumber = o.ReceiptNumber,
-                    ProcessStatus = o.ProcessStatus,
+                    Status = o.Status,
                     ExpectedCompletionDate = o.ExpectedCompletionDate,
                     CreatedAt = DateOnly.FromDateTime(o.CreatedAt),
                     Notes = o.Notes,
