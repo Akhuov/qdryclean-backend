@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="UseCases\Invoices\Validators\" />
+    <Folder Include="UseCases\Utilities\" />
   </ItemGroup>
 
 </Project>

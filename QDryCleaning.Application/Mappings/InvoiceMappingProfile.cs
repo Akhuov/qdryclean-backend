@@ -8,7 +8,7 @@ namespace QDryClean.Application.Mappings
     {
         public InvoiceMappingProfile()
         {
-            CreateMap<Invoice, InvoiceDto>();
+            CreateMap<Invoice, InvoiceDto>().ReverseMap();
             CreateMap<InvoiceDto, CreateInvoiceCommand>().ReverseMap();
         }
     }

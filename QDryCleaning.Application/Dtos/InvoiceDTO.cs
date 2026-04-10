@@ -9,6 +9,5 @@ namespace QDryClean.Application.Dtos
         public PaymentStatus PaymentStatus { get; set; }
         public string? Notes { get; set; }
         public decimal Discount { get; set; }
-        public int OrderId { get; set; }
     }
 }

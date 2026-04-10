@@ -4,6 +4,6 @@ namespace QDryClean.Application.Common.Interfaces.Services
 {
     public interface IReceiptGenerator
     {
-        Task<byte[]> GenerateEscPos(Invoice invocie);
+        string GenerateEscPos(Order order);
     }
 }
