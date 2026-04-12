@@ -1,11 +1,13 @@
-﻿namespace QDryClean.Application.Dtos
+﻿using QDryClean.Domain.Enums;
+
+namespace QDryClean.Application.Dtos
 {
     public class ItemDto
     {
         public int Id { get; set; }
-        public string ItemTypeName { get; set; }
         public string? Colour { get; set; }
         public string? BrandName { get; set; }
         public string? Description { get; set; }
+        public ItemStatus? Status { get; set; }
     }
 }

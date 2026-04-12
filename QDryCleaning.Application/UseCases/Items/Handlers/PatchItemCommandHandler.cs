@@ -9,31 +9,23 @@ using QDryClean.Application.UseCases.Items.Commands;
 
 namespace QDryClean.Application.UseCases.Items.Handlers
 {
-    public class UpdateItemCommandHandler : CommandHandlerBase, IRequestHandler<UpdateItemCommand, ApiResponse<ItemDto>>
+    public class PatchItemCommandHandler : CommandHandlerBase, IRequestHandler<PatchItemCommand, ApiResponse<ItemDto>>
     {
-        public UpdateItemCommandHandler(
+        public PatchItemCommandHandler(
             IApplicationDbContext applicationDbContext,
             ICurrentUserService currentUserService,
             IMapper mapper) : base(applicationDbContext, currentUserService, mapper) { }
 
-        public async Task<ApiResponse<ItemDto>> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<ItemDto>> Handle(PatchItemCommand request, CancellationToken cancellationToken)
         {
             var item = await _applicationDbContext.Items.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
 
-            if (request.Colour != null)
+            if (item == null)
             {
-                item.Colour = request.Colour;
+                return ApiResponseFactory.Fail<ItemDto>(1001, "Item not found");
             }
 
-            if (request.Description != null)
-            {
-                item.Description = request.Description;
-            }
-
-            if (request.BrandName != null)
-            {
-                item.BrandName = request.BrandName;
-            }
+            item.Status = request.Status;
 
             item.UpdatedBy = _currentUserService.UserId;
             item.UpdatedAt = DateTime.UtcNow;
