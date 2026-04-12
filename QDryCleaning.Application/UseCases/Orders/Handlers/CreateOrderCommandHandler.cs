@@ -85,6 +85,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
             {
                 var itemType = itemTypes.First(x => x.Id == item.ItemTypeId);
 
+                item.Status = ItemStatus.Accepted;
                 item.Order = order;
                 item.ItemType = itemType;
             }

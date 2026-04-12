@@ -20,6 +20,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
             var order = await _applicationDbContext.Orders
                 .FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
             order.Status = request.Status;
+
             order.UpdatedBy = _currentUserService.UserId;
             order.UpdatedAt = DateTime.Now;
 

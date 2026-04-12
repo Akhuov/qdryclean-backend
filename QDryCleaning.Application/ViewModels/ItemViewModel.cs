@@ -1,4 +1,5 @@
 ﻿using QDryClean.Application.Dtos;
+using QDryClean.Domain.Enums;
 
 namespace QDryClean.Application.ViewModels
 {
@@ -9,5 +10,6 @@ namespace QDryClean.Application.ViewModels
         public string? Colour { get; set; }
         public string? BrandName { get; set; }
         public string? Description { get; set; }
+        public ItemStatus Status { get; set; }
     }
 }

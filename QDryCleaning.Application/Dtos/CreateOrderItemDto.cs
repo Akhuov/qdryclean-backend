@@ -1,4 +1,6 @@
-﻿namespace QDryClean.Application.Dtos
+﻿using QDryClean.Domain.Enums;
+
+namespace QDryClean.Application.Dtos
 {
     public class CreateOrderItemDto
     {
@@ -6,5 +8,6 @@
         public string? Colour { get; set; }
         public string? BrandName { get; set; }
         public string? Description { get; set; }
+        public ItemStatus Status { get; set; }
     }
 }

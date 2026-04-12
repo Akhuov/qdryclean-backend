@@ -79,6 +79,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                     Colour = i.Colour,
                     BrandName = i.BrandName,
                     Description = i.Description,
+                    Status = i.Status
                 }).ToList() ?? new List<ItemViewModel>()
             };
 

@@ -35,8 +35,7 @@ namespace QDryClean.Api.Controllers
         public async Task<IActionResult> PatchOrderAsync(int orderId, [FromBody] PatchOrderCommand command)
         {
             command.Id = orderId;
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            return Ok(await _mediator.Send(command));
         }
 
 
