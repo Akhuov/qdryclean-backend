@@ -47,5 +47,10 @@ namespace QDryClean.Api.Controllers
         [HttpGet("{orderId:int}")]
         public async Task<IActionResult> GetByIdOrderAsync(int orderId)
             => Ok(await _mediator.Send(new GetByIdOrderQuery() { Id = orderId }));
+
+
+        [HttpGet("items/by-receipt/{receiptNumber:int}")]
+        public async Task<IActionResult> GetByReceiptOrderItemsAsync(int receiptNumber)
+            => Ok(await _mediator.Send(new GetByReseiptOrderItemsQuery() { ReseiptNumber = receiptNumber }));
     }
 }

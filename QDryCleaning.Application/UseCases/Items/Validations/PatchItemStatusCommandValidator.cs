@@ -5,11 +5,11 @@ using QDryClean.Application.UseCases.Items.Commands;
 
 namespace QDryClean.Application.UseCases.Items.Validations
 {
-    public class PatchItemCommandValidator
-        : AbstractValidator<PatchItemCommand>
+    public class PatchItemStatusCommandValidator
+        : AbstractValidator<PatchItemStatusCommand>
     {
-        public PatchItemCommandValidator(IApplicationDbContext dbContext)
-        {
+        public PatchItemStatusCommandValidator(IApplicationDbContext dbContext)
+        {   
 
             RuleFor(x => x.Status)
                 .Cascade(CascadeMode.Stop)

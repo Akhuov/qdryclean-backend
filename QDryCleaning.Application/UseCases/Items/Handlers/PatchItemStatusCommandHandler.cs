@@ -9,14 +9,14 @@ using QDryClean.Application.UseCases.Items.Commands;
 
 namespace QDryClean.Application.UseCases.Items.Handlers
 {
-    public class PatchItemCommandHandler : CommandHandlerBase, IRequestHandler<PatchItemCommand, ApiResponse<ItemDto>>
+    public class PatchItemStatusCommandHandler : CommandHandlerBase, IRequestHandler<PatchItemStatusCommand, ApiResponse<ItemDto>>
     {
-        public PatchItemCommandHandler(
+        public PatchItemStatusCommandHandler(
             IApplicationDbContext applicationDbContext,
             ICurrentUserService currentUserService,
             IMapper mapper) : base(applicationDbContext, currentUserService, mapper) { }
 
-        public async Task<ApiResponse<ItemDto>> Handle(PatchItemCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<ItemDto>> Handle(PatchItemStatusCommand request, CancellationToken cancellationToken)
         {
             var item = await _applicationDbContext.Items.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
 
