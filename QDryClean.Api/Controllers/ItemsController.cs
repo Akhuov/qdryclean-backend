@@ -33,7 +33,7 @@ namespace QDryClean.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPatch("status/{itemId:int}")]
+        [HttpPatch("{itemId:int}/status")]
         public async Task<IActionResult> PatchItemAsync(int itemId, PatchItemStatusCommand command)
         {
             command.Id = itemId;
