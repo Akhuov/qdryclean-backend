@@ -94,7 +94,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
 
             var receiptBase64 = _receiptGenerator.GenerateEscPos(order);
 
-            var invoice = _invoiceFactory.Create(order, itemTypes);
+            var invoice = _invoiceFactory.Create(order, itemTypes, request.PaymentStatus);
 
             await _applicationDbContext.Orders.AddAsync(order, cancellationToken);
             await _applicationDbContext.OrderInvoices.AddAsync(invoice, cancellationToken);

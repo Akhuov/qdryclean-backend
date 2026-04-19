@@ -7,7 +7,7 @@ namespace QDryClean.Application.Common.Services
 {
     public class InvoiceFactory : IInvoiceFactory
     {
-        public Invoice Create(Order order, IReadOnlyCollection<ItemType> itemTypes)
+        public Invoice Create(Order order, IReadOnlyCollection<ItemType> itemTypes, PaymentStatus paymentStatus)
         {
             var invoiceItems = new List<Item>();
             decimal totalAmount = 0;
@@ -26,7 +26,7 @@ namespace QDryClean.Application.Common.Services
             {
                 Order = order,
                 TotalCost = totalAmount,
-                PaymentStatus = PaymentStatus.NotPaid,
+                PaymentStatus = paymentStatus,
             };
         }
     }
