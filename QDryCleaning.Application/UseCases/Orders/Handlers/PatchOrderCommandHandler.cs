@@ -8,7 +8,7 @@ using QDryClean.Application.UseCases.Orders.Commands;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
-    public class PatchOrderCommandHandler : CommandHandlerBase, IRequestHandler<PatchOrderCommand, ApiResponse<Unit>>
+    public class PatchOrderCommandHandler : BaseHandler, IRequestHandler<PatchOrderCommand, ApiResponse<Unit>>
     {
         public PatchOrderCommandHandler(
             IApplicationDbContext applicationDbContext,
@@ -19,7 +19,8 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
 
             var order = await _applicationDbContext.Orders
                 .FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
-            order.ProcessStatus = request.ProcessStatus;
+            order.Status = request.Status;
+
             order.UpdatedBy = _currentUserService.UserId;
             order.UpdatedAt = DateTime.Now;
 

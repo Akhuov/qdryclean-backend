@@ -8,7 +8,7 @@ using QDryClean.Application.UseCases.ItemTypes.Commands;
 
 namespace QDryClean.Application.UseCases.ItemTypes.Handlers
 {
-    public class SoftDeleteItemTypeCommandHandler : CommandHandlerBase, IRequestHandler<SoftDeleteItemTypeCommand, ApiResponse<Unit>>
+    public class SoftDeleteItemTypeCommandHandler : BaseHandler, IRequestHandler<SoftDeleteItemTypeCommand, ApiResponse<Unit>>
     {
         public SoftDeleteItemTypeCommandHandler(
             IApplicationDbContext applicationDbContext,

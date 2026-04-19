@@ -35,8 +35,7 @@ namespace QDryClean.Api.Controllers
         public async Task<IActionResult> PatchOrderAsync(int orderId, [FromBody] PatchOrderCommand command)
         {
             command.Id = orderId;
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            return Ok(await _mediator.Send(command));
         }
 
 
@@ -48,5 +47,10 @@ namespace QDryClean.Api.Controllers
         [HttpGet("{orderId:int}")]
         public async Task<IActionResult> GetByIdOrderAsync(int orderId)
             => Ok(await _mediator.Send(new GetByIdOrderQuery() { Id = orderId }));
+
+
+        [HttpGet("by-receipt/{receiptNumber:int}/items")]
+        public async Task<IActionResult> GetByReceiptOrderItemsAsync(int receiptNumber)
+            => Ok(await _mediator.Send(new GetByReseiptOrderItemsQuery() { ReseiptNumber = receiptNumber }));
     }
 }

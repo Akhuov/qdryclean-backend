@@ -31,6 +31,8 @@ namespace QDryClean.Infrastructure
             services.AddScoped<IBarCodeService, BarCodeService>();
             services.AddScoped<IInvoiceFactory, InvoiceFactory>();
 
+            services.AddScoped<IReceiptGenerator, EscPosReceiptGenerator>();
+
             return services;
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using QDryClean.Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QDryClean.Domain.Entities
 {
@@ -7,6 +8,7 @@ namespace QDryClean.Domain.Entities
         public string? Colour { get; set; }
         public string? BrandName { get; set; }
         public string? Description { get; set; }
+        public ItemStatus Status { get; set; }
         public int ItemTypeId { get; set; }
         public ItemType ItemType { get; set; }
         public int? OrderId { get; set; }

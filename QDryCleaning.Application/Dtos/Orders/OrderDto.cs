@@ -7,7 +7,7 @@ namespace QDryClean.Application.Dtos.Orders
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public int ReceiptNumber { get; set; }
-        public ProcessStatus ProcessStatus { get; set; }
+        public OrderStatus Status { get; set; }
         public DateOnly ExpectedCompletionDate { get; set; }
         public IList<string> Notes { get; set; } = new List<string>();
 

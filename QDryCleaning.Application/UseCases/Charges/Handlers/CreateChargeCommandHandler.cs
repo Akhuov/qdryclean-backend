@@ -10,7 +10,7 @@ using QDryClean.Domain.Entities;
 
 namespace QDryClean.Application.UseCases.Charges.Handlers
 {
-    public class CreateChargeCommandHandler : CommandHandlerBase, IRequestHandler<CreateChargeCommand, ApiResponse<ChargeDto>>
+    public class CreateChargeCommandHandler : BaseHandler, IRequestHandler<CreateChargeCommand, ApiResponse<ChargeDto>>
     {
         public CreateChargeCommandHandler(
             IApplicationDbContext applicationDbContext,

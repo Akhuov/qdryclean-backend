@@ -8,7 +8,7 @@ using QDryClean.Application.UseCases.ItemTypes.Commands;
 
 namespace QDryClean.Application.UseCases.ItemTypes.Handlers
 {
-    public class UpdateItemTypeCommandHandler : CommandHandlerBase, IRequestHandler<UpdateItemTypeCommand, ApiResponse<UpdateItemTypeCommand>>
+    public class UpdateItemTypeCommandHandler : BaseHandler, IRequestHandler<UpdateItemTypeCommand, ApiResponse<UpdateItemTypeCommand>>
     {
         public UpdateItemTypeCommandHandler(
            IApplicationDbContext applicationDbContext,

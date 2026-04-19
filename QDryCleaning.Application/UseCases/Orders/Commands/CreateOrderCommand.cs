@@ -5,7 +5,7 @@ using QDryClean.Application.Dtos.Orders;
 
 namespace QDryClean.Application.UseCases.Orders.Commands
 {
-    public class CreateOrderCommand : IRequest<ApiResponse<OrderDto>>
+    public class CreateOrderCommand : IRequest<ApiResponse<OrderCreatedDto>>
     {
         public DateOnly? ExpectedCompletionDate { get; set; } = null;
         public int CustomerId { get; set; }

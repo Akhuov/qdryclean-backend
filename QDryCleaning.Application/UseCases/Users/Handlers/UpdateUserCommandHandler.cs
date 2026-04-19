@@ -9,7 +9,7 @@ using QDryClean.Application.UseCases.Users.Commands;
 
 namespace QDryClean.Application.UseCases.Users.Handlers
 {
-    public class UpdateUserCommandHandler : CommandHandlerBase, IRequestHandler<UpdateUserCommand, UserDto>
+    public class UpdateUserCommandHandler : BaseHandler, IRequestHandler<UpdateUserCommand, UserDto>
     {
         public UpdateUserCommandHandler(
             IApplicationDbContext applicationDbContext,

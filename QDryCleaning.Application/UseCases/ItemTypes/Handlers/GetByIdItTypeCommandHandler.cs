@@ -9,7 +9,7 @@ using QDryClean.Application.UseCases.ItemTypes.Quarries;
 
 namespace QDryClean.Application.UseCases.ItemTypes.Handlers
 {
-    public class GetByIdItTypeCommandHandler : CommandHandlerBase, IRequestHandler<GetByIdItemTypeCommand, ApiResponse<ItemTypeDto>>
+    public class GetByIdItTypeCommandHandler : BaseHandler, IRequestHandler<GetByIdItemTypeCommand, ApiResponse<ItemTypeDto>>
     {
         public GetByIdItTypeCommandHandler(
             IApplicationDbContext applicationDbContext,

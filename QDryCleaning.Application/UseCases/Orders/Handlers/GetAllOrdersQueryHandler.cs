@@ -11,9 +11,9 @@ using QDryClean.Application.UseCases.Orders.Queries;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
-    public class GetAllOrdersCommandHandler : CommandHandlerBase, IRequestHandler<GetAllOrdersQuery, ApiResponse<PagedResult<OrderViewModel>>>
+    public class GetAllOrdersQueryHandler : BaseHandler, IRequestHandler<GetAllOrdersQuery, ApiResponse<PagedResult<OrderViewModel>>>
     {
-        public GetAllOrdersCommandHandler(
+        public GetAllOrdersQueryHandler(
            IApplicationDbContext applicationDbContext,
            ICurrentUserService currentUserService,
            IMapper mapper) : base(applicationDbContext, currentUserService, mapper) { }
@@ -41,8 +41,13 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                 );
             }
 
+            if (request.Status.HasValue)
+            {
+                query = query.Where(o => o.Status == request.Status);
+            }
+
             var items = await query
-                .OrderByDescending(o => o.ReceiptNumber)
+                .OrderByDescending(o => o.CreatedAt)
                 .Select(o => new OrderViewModel
                 {
                     Id = o.Id,
@@ -50,10 +55,11 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                     {
                         Id = o.Customer.Id,
                         FullName = o.Customer.FullName,
-                        PhoneNumber = o.Customer.PhoneNumber
+                        PhoneNumber = o.Customer.PhoneNumber,
+                        AdditionalPhoneNumber = o.Customer.AdditionalPhoneNumber
                     },
                     ReceiptNumber = o.ReceiptNumber,
-                    ProcessStatus = o.ProcessStatus,
+                    Status = o.Status,
                     ExpectedCompletionDate = o.ExpectedCompletionDate,
                     CreatedAt = DateOnly.FromDateTime(o.CreatedAt),
                     TotalCost = o.Invoice.TotalCost,

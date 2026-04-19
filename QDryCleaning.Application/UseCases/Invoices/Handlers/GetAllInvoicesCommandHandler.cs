@@ -9,7 +9,7 @@ using QDryClean.Application.UseCases.Invoices.Quarries;
 
 namespace QDryClean.Application.UseCases.Invoices.Handlers
 {
-    public class GetAllInvoicesCommandHandler : CommandHandlerBase, IRequestHandler<GetAllInvoicesCommand, List<InvoiceDto>>
+    public class GetAllInvoicesCommandHandler : BaseHandler, IRequestHandler<GetAllInvoicesCommand, List<InvoiceDto>>
     {
         public GetAllInvoicesCommandHandler(
             IApplicationDbContext applicationDbContext,

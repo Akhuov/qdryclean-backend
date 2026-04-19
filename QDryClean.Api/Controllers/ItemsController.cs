@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using QDryClean.Application.UseCases.Items.Commands;
 using QDryClean.Application.UseCases.Items.Querries;
 using QDryClean.Domain.Enums;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace QDryClean.Api.Controllers
 {
+    [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
     [Route("api/v1/items")]
     [ApiController]
     public class ItemsController : ControllerBase
@@ -19,7 +19,6 @@ namespace QDryClean.Api.Controllers
             _mediator = mediator;
         }
 
-        [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
         [HttpPost]
         public async Task<IActionResult> CreateItemAsync(CreateItemCommand command)
         {
@@ -27,22 +26,20 @@ namespace QDryClean.Api.Controllers
             return Created("ItemType created successfully.", result);
         }
 
-        [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
         [HttpDelete("{itemId:int}")]
         public async Task<IActionResult> DeleteItemAsync(int itemId)
         {
-            var result = await _mediator.Send(new SoftDeleteItemCommand() { Id = itemId } );
+            var result = await _mediator.Send(new SoftDeleteItemCommand() { Id = itemId });
             return Ok(result);
         }
 
-        [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
-        [HttpPut("{itemId:int}")]
-        public async Task<IActionResult> UpdateItemAsync(int itemId, UpdateItemCommand command)
+        [HttpPatch("{itemId:int}/status")]
+        public async Task<IActionResult> PatchItemAsync(int itemId, PatchItemStatusCommand command)
         {
             command.Id = itemId;
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            return Ok(await _mediator.Send(command));
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAllItemTypesAsync()

@@ -8,7 +8,7 @@ using QDryClean.Application.UseCases.Users.Quarries;
 
 namespace QDryClean.Application.UseCases.Users.Handlers
 {
-    public class GetAllUsersCommandHandler : CommandHandlerBase, IRequestHandler<GetAllUsersCommand, List<UserDto>>
+    public class GetAllUsersCommandHandler : BaseHandler, IRequestHandler<GetAllUsersCommand, List<UserDto>>
     {
 
         public GetAllUsersCommandHandler(

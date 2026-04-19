@@ -8,12 +8,10 @@ using Microsoft.OpenApi.Models;
 using QDryClean.Api.Middlewares;
 using QDryClean.Application;
 using QDryClean.Application.Common.Behaviors;
-using QDryClean.Application.Common.Responses;
 using QDryClean.Application.UseCases.Customers.Validators;
 using QDryClean.Infrastructure;
 using QDryClean.Infrastructure.Persistance;
 using System.Text;
-using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,16 +86,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:5173") // порт фронта
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins(
+                "http://localhost:5173",
+                "http://192.168.1.5:5173",
+                "http://192.168.1.4:5173",
+                "http://172.28.64.1:5173"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 });
 
 // Fluent Validation

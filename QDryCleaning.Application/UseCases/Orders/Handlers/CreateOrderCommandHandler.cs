@@ -5,29 +5,36 @@ using QDryClean.Application.Absreactions;
 using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Application.Common.Pagination;
 using QDryClean.Application.Common.Responses;
+using QDryClean.Application.Dtos;
 using QDryClean.Application.Dtos.Orders;
 using QDryClean.Application.UseCases.Orders.Commands;
 using QDryClean.Domain.Entities;
+using QDryClean.Domain.Enums;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
-    public class CreateOrderCommandHandler : CommandHandlerBase, IRequestHandler<CreateOrderCommand, ApiResponse<OrderDto>>
+    public class CreateOrderCommandHandler : BaseHandler, IRequestHandler<CreateOrderCommand, ApiResponse<OrderCreatedDto>>
     {
         private readonly IInvoiceFactory _invoiceFactory;
+        private readonly IReceiptGenerator _receiptGenerator;
+
         public CreateOrderCommandHandler(
-           IApplicationDbContext applicationDbContext,
-           IInvoiceFactory invoiceFactory,
-           ICurrentUserService currentUserService,
-           IMapper mapper) : base(applicationDbContext, currentUserService, mapper)
+            IApplicationDbContext applicationDbContext,
+            IReceiptGenerator receiptGenerator,
+            IInvoiceFactory invoiceFactory,
+            ICurrentUserService currentUserService,
+            IMapper mapper) : base(applicationDbContext, currentUserService, mapper)
         {
             _invoiceFactory = invoiceFactory;
+            _receiptGenerator = receiptGenerator;
         }
-        public async Task<ApiResponse<OrderDto>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+
+        public async Task<ApiResponse<OrderCreatedDto>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var itemTypeIds = request.Items
-               .Select(x => x.ItemTypeId)
-               .Distinct()
-               .ToList();
+                .Select(x => x.ItemTypeId)
+                .Distinct()
+                .ToList();
 
             var itemTypes = await _applicationDbContext.ItemTypes
                 .Where(x => itemTypeIds.Contains(x.Id))
@@ -35,27 +42,57 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                 .Include(x => x.Charge)
                 .ToListAsync(cancellationToken);
 
+            if (itemTypes.Count != itemTypeIds.Count)
+            {
+                return ApiResponseFactory.Fail<OrderCreatedDto>(
+                    1001,
+                    "Один или несколько типов вещей не найдены.");
+            }
+
+            var customer = await _applicationDbContext.Customers
+                .Where(x => x.Id == request.CustomerId)
+                .WhereNotDeleted()
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (customer is null)
+            {
+                return ApiResponseFactory.Fail<OrderCreatedDto>(
+                    1001,
+                    "Клиент не найден.");
+            }
+
             var order = _mapper.Map<Order>(request);
 
+            order.Items ??= new List<Item>();
+            order.Notes ??= new List<string>();
+
+            order.Customer = customer;
+            order.CustomerId = customer.Id;
             order.ExpectedCompletionDate = request.ExpectedCompletionDate ??
-                DateOnly.FromDateTime(DateTime.UtcNow.AddDays(3));
+                                           DateOnly.FromDateTime(DateTime.UtcNow.AddDays(3));
+            order.Status = OrderStatus.Created;
             order.CreatedBy = _currentUserService.UserId;
             order.CreatedAt = DateTime.Now;
 
             if (!string.IsNullOrWhiteSpace(request.Note))
-                order.Notes.Add(request.Note);
-
-            // 1) замаппили items (ItemType/Order/OrderId игнорируются профилем)
-            var items = _mapper.Map<List<Item>>(request.Items);
-
-            // 2) связали items с order
-            foreach (var item in items)
             {
-                item.Order = order;
+                order.Notes.Add(request.Note);
             }
 
-            // 3) положили в заказ
+            var items = _mapper.Map<List<Item>>(request.Items);
+
+            foreach (var item in items)
+            {
+                var itemType = itemTypes.First(x => x.Id == item.ItemTypeId);
+
+                item.Status = ItemStatus.Accepted;
+                item.Order = order;
+                item.ItemType = itemType;
+            }
+
             order.Items = items;
+
+            var receiptBase64 = _receiptGenerator.GenerateEscPos(order);
 
             var invoice = _invoiceFactory.Create(order, itemTypes);
 
@@ -63,7 +100,19 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
             await _applicationDbContext.OrderInvoices.AddAsync(invoice, cancellationToken);
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
-            return ApiResponseFactory.Ok(_mapper.Map<OrderDto>(order));
+            var orderCreatedDto = new OrderCreatedDto
+            {
+                Id = order.Id,
+                ReceiptNumber = order.ReceiptNumber,
+                Customer = _mapper.Map<CustomerDto>(order.Customer),
+                Invoice = _mapper.Map<InvoiceDto>(invoice),
+                ReceiptBase64 = receiptBase64,
+                Status = order.Status,
+                ExpectedCompletionDate = order.ExpectedCompletionDate,
+                Items = _mapper.Map<List<ItemDto>>(order.Items)
+            };
+
+            return ApiResponseFactory.Ok(orderCreatedDto);
         }
     }
 }

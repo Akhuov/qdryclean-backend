@@ -1,16 +1,15 @@
 ﻿using MediatR;
 using QDryClean.Application.Common.Responses;
 using QDryClean.Application.Dtos;
+using QDryClean.Domain.Enums;
 using System.Text.Json.Serialization;
 
 namespace QDryClean.Application.UseCases.Items.Commands
 {
-    public class UpdateItemCommand : IRequest<ApiResponse<ItemDto>>
+    public class PatchItemStatusCommand : IRequest<ApiResponse<Unit>>
     {
         [JsonIgnore]
         public int Id { get; set; }
-        public string? Colour { get; set; }
-        public string? BrandName { get; set; }
-        public string? Description { get; set; }
+        public ItemStatus Status { get; set; }
     }
 }

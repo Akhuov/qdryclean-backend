@@ -9,7 +9,7 @@ using QDryClean.Application.UseCases.Charges.Quarries;
 
 namespace QDryClean.Application.UseCases.Charges.Handlers
 {
-    public class GetAllChargesCommandHandler : CommandHandlerBase, IRequestHandler<GetAllChargesCommand, ApiResponse<List<ChargeDto>>>
+    public class GetAllChargesCommandHandler : BaseHandler, IRequestHandler<GetAllChargesCommand, ApiResponse<List<ChargeDto>>>
     {
         public GetAllChargesCommandHandler(
             IApplicationDbContext applicationDbContext,

@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UseCases\Invoices\Validators\**" />
+    <EmbeddedResource Remove="UseCases\Invoices\Validators\**" />
+    <None Remove="UseCases\Invoices\Validators\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\QDryCleaning.Domain\QDryClean.Domain.csproj" />
   </ItemGroup>
 
@@ -26,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\Invoices\Validators\" />
+    <Folder Include="UseCases\Utilities\" />
   </ItemGroup>
 
 </Project>

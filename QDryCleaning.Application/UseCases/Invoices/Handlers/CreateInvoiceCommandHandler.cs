@@ -9,7 +9,7 @@ using QDryClean.Domain.Entities;
 
 namespace QDryClean.Application.UseCases.Invoices.Handlers
 {
-    public class CreateInvoiceCommandHandler : CommandHandlerBase, IRequestHandler<CreateInvoiceCommand, InvoiceDto>
+    public class CreateInvoiceCommandHandler : BaseHandler, IRequestHandler<CreateInvoiceCommand, InvoiceDto>
     {
         public CreateInvoiceCommandHandler(
             IApplicationDbContext applicationDbContext,
