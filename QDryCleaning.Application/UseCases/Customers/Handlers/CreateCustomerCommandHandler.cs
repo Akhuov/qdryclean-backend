@@ -11,7 +11,7 @@ using QDryClean.Domain.Entities;
 
 namespace QDryClean.Application.UseCases.Customers.Handlers
 {
-    public class CreateCustomerCommandHandler : CommandHandlerBase, IRequestHandler<CreateCustomerCommand, ApiResponse<CustomerDto>>
+    public class CreateCustomerCommandHandler : BaseHandler, IRequestHandler<CreateCustomerCommand, ApiResponse<CustomerDto>>
     {
         public CreateCustomerCommandHandler(
             IApplicationDbContext applicationDbContext,

@@ -10,7 +10,7 @@ using QDryClean.Application.UseCases.Customers.Queries;
 
 namespace QDryClean.Application.UseCases.Customers.Handlers
 {
-    public class GetByPhoneNumberCustomerQueryHandler : CommandHandlerBase, IRequestHandler<GetByPhoneNumberCustomerQuery, ApiResponse<CustomerDto>>
+    public class GetByPhoneNumberCustomerQueryHandler : BaseHandler, IRequestHandler<GetByPhoneNumberCustomerQuery, ApiResponse<CustomerDto>>
     {
         public GetByPhoneNumberCustomerQueryHandler(
             IApplicationDbContext applicationDbContext,

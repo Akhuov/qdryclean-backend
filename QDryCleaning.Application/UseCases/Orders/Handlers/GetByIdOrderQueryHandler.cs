@@ -12,7 +12,7 @@ using QDryClean.Application.ViewModels;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
-    public class GetByIdOrderQueryHandler : CommandHandlerBase, IRequestHandler<GetByIdOrderQuery, ApiResponse<OrderDetailsDto>>
+    public class GetByIdOrderQueryHandler : BaseHandler, IRequestHandler<GetByIdOrderQuery, ApiResponse<OrderDetailsDto>>
     {
         private readonly IReceiptGenerator _receiptGenerator;
 

@@ -9,7 +9,7 @@ using QDryClean.Application.UseCases.Charges.Commands;
 
 namespace QDryClean.Application.UseCases.Charges.Handlers
 {
-    public class UpdateChargeCommandHandler : CommandHandlerBase, IRequestHandler<UpdateChargeCommand, ApiResponse<ChargeDto>>
+    public class UpdateChargeCommandHandler : BaseHandler, IRequestHandler<UpdateChargeCommand, ApiResponse<ChargeDto>>
     {
         public UpdateChargeCommandHandler(
            IApplicationDbContext applicationDbContext,

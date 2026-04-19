@@ -10,7 +10,7 @@ using QDryClean.Domain.Entities;
 
 namespace QDryClean.Application.UseCases.ItemTypes.Handlers
 {
-    public class CreateItemTypeCommandHandler : CommandHandlerBase, IRequestHandler<CreateItemTypeCommand, ApiResponse<ItemTypeDto>>
+    public class CreateItemTypeCommandHandler : BaseHandler, IRequestHandler<CreateItemTypeCommand, ApiResponse<ItemTypeDto>>
     {
         public CreateItemTypeCommandHandler(
             IApplicationDbContext applicationDbContext,

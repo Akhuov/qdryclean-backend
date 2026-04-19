@@ -9,7 +9,7 @@ using QDryClean.Domain.Entities;
 
 namespace QDryClean.Application.UseCases.Items.Handlers
 {
-    public class CreateItemCommandHandler : CommandHandlerBase, IRequestHandler<CreateItemCommand, ApiResponse<ItemDto>>
+    public class CreateItemCommandHandler : BaseHandler, IRequestHandler<CreateItemCommand, ApiResponse<ItemDto>>
     {
         public CreateItemCommandHandler(
             IApplicationDbContext applicationDbContext,

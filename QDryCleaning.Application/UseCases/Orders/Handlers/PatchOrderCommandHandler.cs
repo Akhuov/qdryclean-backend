@@ -8,7 +8,7 @@ using QDryClean.Application.UseCases.Orders.Commands;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
-    public class PatchOrderCommandHandler : CommandHandlerBase, IRequestHandler<PatchOrderCommand, ApiResponse<Unit>>
+    public class PatchOrderCommandHandler : BaseHandler, IRequestHandler<PatchOrderCommand, ApiResponse<Unit>>
     {
         public PatchOrderCommandHandler(
             IApplicationDbContext applicationDbContext,

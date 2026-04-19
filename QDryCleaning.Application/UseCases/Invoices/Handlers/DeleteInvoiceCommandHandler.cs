@@ -8,7 +8,7 @@ using QDryClean.Application.UseCases.Invoices.Commands;
 
 namespace QDryClean.Application.UseCases.Invoices.Handlers
 {
-    public class DeleteInvoiceCommandHandler : CommandHandlerBase, IRequestHandler<DeleteInvoiceCommand, string>
+    public class DeleteInvoiceCommandHandler : BaseHandler, IRequestHandler<DeleteInvoiceCommand, string>
     {
         public DeleteInvoiceCommandHandler(
             IApplicationDbContext applicationDbContext,

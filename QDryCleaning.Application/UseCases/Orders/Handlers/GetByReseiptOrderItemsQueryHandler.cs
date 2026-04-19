@@ -10,7 +10,7 @@ using QDryClean.Application.UseCases.Orders.Queries;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
-    public class GetByReseiptOrderItemsQueryHandler : CommandHandlerBase, IRequestHandler<GetByReseiptOrderItemsQuery, ApiResponse<List<ItemDto>>>
+    public class GetByReseiptOrderItemsQueryHandler : BaseHandler, IRequestHandler<GetByReseiptOrderItemsQuery, ApiResponse<List<ItemDto>>>
     {
         public GetByReseiptOrderItemsQueryHandler(
             IApplicationDbContext applicationDbContext,

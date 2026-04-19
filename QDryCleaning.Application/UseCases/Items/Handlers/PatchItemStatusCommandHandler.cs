@@ -10,7 +10,7 @@ using QDryClean.Domain.Enums;
 
 namespace QDryClean.Application.UseCases.Items.Handlers
 {
-    public class PatchItemStatusCommandHandler : CommandHandlerBase, IRequestHandler<PatchItemStatusCommand, ApiResponse<Unit>>
+    public class PatchItemStatusCommandHandler : BaseHandler, IRequestHandler<PatchItemStatusCommand, ApiResponse<Unit>>
     {
         public PatchItemStatusCommandHandler(
             IApplicationDbContext applicationDbContext,

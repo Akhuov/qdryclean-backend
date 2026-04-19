@@ -9,7 +9,7 @@ using QDryClean.Application.UseCases.ItemCategories.Querries;
 
 namespace QDryClean.Application.UseCases.ItemCategories.Handlers
 {
-    public class GetByIdItemCategoryQuerryHandler : CommandHandlerBase, IRequestHandler<GetByIdItemCategoryQuerry, ApiResponse<ItemCategoryDto>>
+    public class GetByIdItemCategoryQuerryHandler : BaseHandler, IRequestHandler<GetByIdItemCategoryQuerry, ApiResponse<ItemCategoryDto>>
     {
         public GetByIdItemCategoryQuerryHandler(
             IApplicationDbContext applicationDbContext,

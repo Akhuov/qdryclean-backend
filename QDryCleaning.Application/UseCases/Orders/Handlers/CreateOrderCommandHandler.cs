@@ -13,7 +13,7 @@ using QDryClean.Domain.Enums;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
-    public class CreateOrderCommandHandler : CommandHandlerBase, IRequestHandler<CreateOrderCommand, ApiResponse<OrderCreatedDto>>
+    public class CreateOrderCommandHandler : BaseHandler, IRequestHandler<CreateOrderCommand, ApiResponse<OrderCreatedDto>>
     {
         private readonly IInvoiceFactory _invoiceFactory;
         private readonly IReceiptGenerator _receiptGenerator;

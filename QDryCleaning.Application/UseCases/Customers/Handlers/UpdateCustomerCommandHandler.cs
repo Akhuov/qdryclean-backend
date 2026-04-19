@@ -10,7 +10,7 @@ using QDryClean.Application.UseCases.Customers.Commands;
 
 namespace QDryClean.Application.UseCases.Customers.Handlers
 {
-    public class UpdateCustomerCommandHandler : CommandHandlerBase, IRequestHandler<UpdateCustomerCommand, ApiResponse<CustomerDto>>
+    public class UpdateCustomerCommandHandler : BaseHandler, IRequestHandler<UpdateCustomerCommand, ApiResponse<CustomerDto>>
     {
         public UpdateCustomerCommandHandler(
             IApplicationDbContext applicationDbContext,

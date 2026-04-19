@@ -12,7 +12,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace QDryClean.Application.UseCases.Customers.Handlers
 {
-    public class GetAllCustomersQuerryHandler : CommandHandlerBase, IRequestHandler<GetAllCustomersQuery, ApiResponse<PagedResult<CustomerDto>>>
+    public class GetAllCustomersQuerryHandler : BaseHandler, IRequestHandler<GetAllCustomersQuery, ApiResponse<PagedResult<CustomerDto>>>
     {
         public GetAllCustomersQuerryHandler(
             IApplicationDbContext applicationDbContext,

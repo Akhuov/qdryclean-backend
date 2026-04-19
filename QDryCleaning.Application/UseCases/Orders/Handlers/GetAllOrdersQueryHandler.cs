@@ -11,7 +11,7 @@ using QDryClean.Application.UseCases.Orders.Queries;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
-    public class GetAllOrdersQueryHandler : CommandHandlerBase, IRequestHandler<GetAllOrdersQuery, ApiResponse<PagedResult<OrderViewModel>>>
+    public class GetAllOrdersQueryHandler : BaseHandler, IRequestHandler<GetAllOrdersQuery, ApiResponse<PagedResult<OrderViewModel>>>
     {
         public GetAllOrdersQueryHandler(
            IApplicationDbContext applicationDbContext,

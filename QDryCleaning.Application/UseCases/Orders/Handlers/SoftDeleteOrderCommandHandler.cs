@@ -9,7 +9,7 @@ using QDryClean.Domain.Enums;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
-    public class SoftDeleteOrderCommandHandler : CommandHandlerBase, IRequestHandler<SoftDeleteOrderCommand, ApiResponse<Unit>>
+    public class SoftDeleteOrderCommandHandler : BaseHandler, IRequestHandler<SoftDeleteOrderCommand, ApiResponse<Unit>>
     {
         public SoftDeleteOrderCommandHandler(
             IApplicationDbContext applicationDbContext,

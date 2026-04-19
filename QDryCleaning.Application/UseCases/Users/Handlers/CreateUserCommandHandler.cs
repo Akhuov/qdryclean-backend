@@ -10,7 +10,7 @@ using QDryClean.Domain.Entities;
 
 namespace QDryClean.Application.UseCases.Users.Handlers
 {
-    public class CreateUserCommandHandler : CommandHandlerBase, IRequestHandler<CreateUserCommand, UserDto>
+    public class CreateUserCommandHandler : BaseHandler, IRequestHandler<CreateUserCommand, UserDto>
     {
 
         public CreateUserCommandHandler(

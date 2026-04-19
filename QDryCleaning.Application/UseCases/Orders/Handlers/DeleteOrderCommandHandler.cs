@@ -8,7 +8,7 @@ using QDryClean.Application.UseCases.Orders.Commands;
 
 namespace QDryClean.Application.UseCases.Orders.Handlers
 {
-    public class DeleteOrderCommandHandler : CommandHandlerBase, IRequestHandler<DeleteOrderCommand, ApiResponse<Unit>>
+    public class DeleteOrderCommandHandler : BaseHandler, IRequestHandler<DeleteOrderCommand, ApiResponse<Unit>>
     {
         public DeleteOrderCommandHandler(
             IApplicationDbContext applicationDbContext,
