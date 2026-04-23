@@ -22,6 +22,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
             CancellationToken cancellationToken)
         {
             var query = _applicationDbContext.Orders
+                .Include(o => o.Invoice)
                 .AsNoTracking()
                 .WhereNotDeleted()
                 .AsQueryable();
@@ -63,7 +64,8 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                     ExpectedCompletionDate = o.ExpectedCompletionDate,
                     CreatedAt = DateOnly.FromDateTime(o.CreatedAt),
                     TotalCost = o.Invoice.TotalCost,
-                    ItemsCount = o.Items.Count()
+                    ItemsCount = o.Items.Count(),
+                    PaymentStatus = o.Invoice.PaymentStatus
                 })
                 .ToPagedResultAsync(
                     request.Page,

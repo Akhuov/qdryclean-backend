@@ -20,6 +20,7 @@ namespace QDryClean.Infrastructure.Persistance
         public DbSet<ItemType> ItemTypes { get; set; }
         public DbSet<ItemCategory> ItemCategories { get; set; }
         public DbSet<Charge> Charges { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

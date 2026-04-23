@@ -13,5 +13,6 @@ namespace QDryClean.Api.ViewModels
         public DateOnly CreatedAt { get; set; }
         public int ItemsCount { get; set; }
         public decimal TotalCost { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
     }
 }

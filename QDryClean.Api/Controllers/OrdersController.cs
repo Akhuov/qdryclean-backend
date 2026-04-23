@@ -52,5 +52,10 @@ namespace QDryClean.Api.Controllers
         [HttpGet("by-receipt/{receiptNumber:int}/items")]
         public async Task<IActionResult> GetByReceiptOrderItemsAsync(int receiptNumber)
             => Ok(await _mediator.Send(new GetByReseiptOrderItemsQuery() { ReseiptNumber = receiptNumber }));
+
+
+        [HttpGet("{orderId:int}/receipt-base64")]
+        public async Task<IActionResult> GetByIdReceiptBase64Async(int orderId)
+            => Ok(await _mediator.Send(new GetByIdReceiptBase64Query() { Id = orderId }));
     }
 }
