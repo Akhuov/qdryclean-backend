@@ -12,7 +12,7 @@ namespace QDryClean.Application.UseCases.Orders.Commands
         public int CustomerId { get; set; }
         public string? Note { get; set; }
         public IList<CreateOrderItemDto> Items { get; set; } = new List<CreateOrderItemDto>();
-        public decimal PaidAmount { get; set; }
+        public PaymentDto Payment { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
     }
 }

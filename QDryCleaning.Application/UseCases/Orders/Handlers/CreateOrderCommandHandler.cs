@@ -96,6 +96,29 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
 
             var invoice = _invoiceFactory.Create(order, itemTypes, request.PaymentStatus);
 
+            if (request.PaymentStatus != PaymentStatus.NotPaid)
+            {
+                var amount = invoice.TotalCost;
+
+                if (request.PaymentStatus == PaymentStatus.Paid)
+                {
+                    amount = invoice.TotalCost;
+                }
+
+                var newPayment = new Payment
+                {
+                    Amount = amount,
+                    PaymentMethod = request.Payment.PaymentMethod,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = _currentUserService.UserId,
+                    Invoice = invoice
+                };
+
+                if (invoice == null)
+                    throw new Exception("Invoice is null");
+                invoice.Payments.Add(newPayment);
+            }
+
             await _applicationDbContext.Orders.AddAsync(order, cancellationToken);
             await _applicationDbContext.OrderInvoices.AddAsync(invoice, cancellationToken);
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
@@ -106,7 +129,6 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                 ReceiptNumber = order.ReceiptNumber,
                 Customer = _mapper.Map<CustomerDto>(order.Customer),
                 Invoice = _mapper.Map<InvoiceDto>(invoice),
-                ReceiptBase64 = receiptBase64,
                 Status = order.Status,
                 ExpectedCompletionDate = order.ExpectedCompletionDate,
                 Items = _mapper.Map<List<ItemDto>>(order.Items)

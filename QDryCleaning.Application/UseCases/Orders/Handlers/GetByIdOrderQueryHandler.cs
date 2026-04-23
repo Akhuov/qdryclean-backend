@@ -62,7 +62,6 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                     AdditionalPhoneNumber = order.Customer?.AdditionalPhoneNumber
                 },
                 ReceiptNumber = order.ReceiptNumber,
-                ReceiptBase64 = receiptBase64,
                 Status = order.Status,
                 ExpectedCompletionDate = order.ExpectedCompletionDate,
                 CreatedAt = DateOnly.FromDateTime(order.CreatedAt),

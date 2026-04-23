@@ -14,7 +14,5 @@ namespace QDryClean.Application.Dtos.Orders
         public DateOnly CreatedAt { get; set; }
         public List<ItemViewModel> Items { get; set; }
         public IList<string> Notes { get; set; } = new List<string>();
-        public string ReceiptBase64 { get; set; }
-
     }
 }

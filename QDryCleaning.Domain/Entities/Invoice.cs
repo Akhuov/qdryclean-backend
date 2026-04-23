@@ -6,7 +6,6 @@ namespace QDryClean.Domain.Entities
     {
         public decimal TotalCost { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
-        public decimal PaidAmount { get; set; }
         public string? Notes { get; set; }
         public decimal Discount { get; set; }
 

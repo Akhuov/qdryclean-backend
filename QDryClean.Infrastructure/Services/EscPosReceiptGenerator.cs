@@ -2,7 +2,6 @@
 using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Domain.Entities;
 using QDryClean.Domain.Enums;
-using System.Globalization;
 using System.Text;
 
 namespace QDryClean.Infrastructure.Services
@@ -94,11 +93,11 @@ namespace QDryClean.Infrastructure.Services
                 _ => "Неизвестно"
             };
 
-            string PaymentStatusToText(int status) => status switch
+            string PaymentStatusToText(PaymentStatus status) => status switch
             {
-                0 => "Не оплачен",
-                1 => "Оплачен",
-                2 => "Частично оплачен",
+                PaymentStatus.NotPaid => "Не оплачен",
+                PaymentStatus.Paid => "Оплачен",
+                PaymentStatus.Partial => "Частично оплачен",
                 _ => "Неизвестно"
             };
 
@@ -108,7 +107,7 @@ namespace QDryClean.Infrastructure.Services
             decimal itemsTotal = order.Items?.Sum(x => x.ItemType?.Charge?.Cost ?? 0) ?? 0;
             decimal totalCost = order.Invoice?.TotalCost ?? itemsTotal;
             decimal discount = order.Invoice?.Discount ?? 0;
-            string paymentStatus = PaymentStatusToText((int)(order.Invoice?.PaymentStatus ?? 0));
+            string paymentStatus = PaymentStatusToText(order.Invoice?.PaymentStatus ?? 0);
 
             var customerName = Safe(order.Customer?.FullName);
             var customerPhone = Safe(order.Customer?.PhoneNumber);

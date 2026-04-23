@@ -4,7 +4,6 @@ namespace QDryClean.Domain.Entities
 {
     public class Payment : Auditable
     {
-        public int Id { get; set; }
 
         public int InvoiceId { get; set; }
         public Invoice Invoice { get; set; }
