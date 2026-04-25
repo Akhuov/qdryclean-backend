@@ -98,7 +98,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
 
             if (request.PaymentStatus != PaymentStatus.NotPaid)
             {
-                var amount = invoice.TotalCost;
+                var amount = request.Payment.Amount;
 
                 if (request.PaymentStatus == PaymentStatus.Paid)
                 {
