@@ -13,6 +13,7 @@ namespace QDryClean.Application.Absreactions
         public DbSet<ItemType> ItemTypes { get; set; }
         public DbSet<ItemCategory> ItemCategories { get; set; }
         public DbSet<Charge> Charges { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 

@@ -16,7 +16,6 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
     public class CreateOrderCommandHandler : BaseHandler, IRequestHandler<CreateOrderCommand, ApiResponse<OrderCreatedDto>>
     {
         private readonly IInvoiceFactory _invoiceFactory;
-        private readonly IReceiptGenerator _receiptGenerator;
 
         public CreateOrderCommandHandler(
             IApplicationDbContext applicationDbContext,
@@ -26,7 +25,6 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
             IMapper mapper) : base(applicationDbContext, currentUserService, mapper)
         {
             _invoiceFactory = invoiceFactory;
-            _receiptGenerator = receiptGenerator;
         }
 
         public async Task<ApiResponse<OrderCreatedDto>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -91,8 +89,6 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
             }
 
             order.Items = items;
-
-            var receiptBase64 = _receiptGenerator.GenerateEscPos(order);
 
             var invoice = _invoiceFactory.Create(order, itemTypes, request.PaymentStatus);
 

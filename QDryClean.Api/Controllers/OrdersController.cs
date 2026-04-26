@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QDryClean.Application.UseCases.Orders.Commands;
 using QDryClean.Application.UseCases.Orders.Queries;
+using QDryClean.Application.UseCases.Payments.Commands;
 using QDryClean.Domain.Enums;
 
 namespace QDryClean.Api.Controllers
@@ -24,6 +25,14 @@ namespace QDryClean.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrderAsync(CreateOrderCommand command)
             => Created("Order created successfully.", await _mediator.Send(command));
+        
+
+        [HttpPost("{orderId:int}/payments")]
+        public async Task<IActionResult> CreatePaymentByOrderIdAsync(int OrderId,CreatePaymentByOrderIdCommand command)
+        {
+            command.OrderId = OrderId;
+            return Created("Payment created successfully.", await _mediator.Send(command));
+        }
 
 
         [HttpDelete("{orderId:int}")]
