@@ -20,7 +20,7 @@ namespace QDryClean.Application.UseCases.Invoices.Handlers
         {
             try
             {
-                var invoice = await _applicationDbContext.OrderInvoices.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
+                var invoice = await _applicationDbContext.Invoices.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
                 return _mapper.Map<InvoiceDto>(invoice);
 
             }

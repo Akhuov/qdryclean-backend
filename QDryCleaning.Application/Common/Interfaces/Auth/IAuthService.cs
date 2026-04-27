@@ -1,7 +1,10 @@
-﻿namespace QDryClean.Application.Common.Interfaces.Auth
+﻿using QDryClean.Application.Common.Responses;
+using QDryClean.Application.Dtos;
+
+namespace QDryClean.Application.Common.Interfaces.Auth
 {
     public interface IAuthService
     {
-        Task<string> LoginAsync(string login, string password);
+        Task<ApiResponse<UserAuthDto>> LoginAsync(string login, string password);
     }
 }

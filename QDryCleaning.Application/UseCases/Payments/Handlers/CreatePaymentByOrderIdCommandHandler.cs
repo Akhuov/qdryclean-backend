@@ -21,7 +21,7 @@ namespace QDryClean.Application.UseCases.Payments.Handlers
             IMapper mapper) : base(applicationDbContext, currentUserService, mapper) { }
         public async Task<ApiResponse<Unit>> Handle(CreatePaymentByOrderIdCommand request, CancellationToken cancellationToken)
         {
-            var invoice = await _applicationDbContext.OrderInvoices
+            var invoice = await _applicationDbContext.Invoices
                 .Include(x => x.Payments)
                 .FirstOrDefaultAsync(x => x.OrderId == request.OrderId, cancellationToken);
 

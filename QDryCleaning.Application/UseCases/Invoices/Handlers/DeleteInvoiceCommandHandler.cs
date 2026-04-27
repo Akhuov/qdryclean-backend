@@ -19,10 +19,10 @@ namespace QDryClean.Application.UseCases.Invoices.Handlers
         {
             try
             {
-                var invoice = await _applicationDbContext.OrderInvoices.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
+                var invoice = await _applicationDbContext.Invoices.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
                 if (invoice is not null)
                 {
-                    _applicationDbContext.OrderInvoices.Remove(invoice);
+                    _applicationDbContext.Invoices.Remove(invoice);
                     await _applicationDbContext.SaveChangesAsync(cancellationToken);
                     return $"Invoice {invoice.Id} Deleted Succesfully!";
                 }

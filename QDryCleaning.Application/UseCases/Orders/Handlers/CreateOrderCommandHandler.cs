@@ -116,7 +116,7 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
             }
 
             await _applicationDbContext.Orders.AddAsync(order, cancellationToken);
-            await _applicationDbContext.OrderInvoices.AddAsync(invoice, cancellationToken);
+            await _applicationDbContext.Invoices.AddAsync(invoice, cancellationToken);
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
             var orderCreatedDto = new OrderCreatedDto

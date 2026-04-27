@@ -20,7 +20,7 @@ namespace QDryClean.Application.UseCases.Invoices.Handlers
         {
             try
             {
-                var invoice = await _applicationDbContext.OrderInvoices.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
+                var invoice = await _applicationDbContext.Invoices.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
                 if (invoice is not null)
                 {
                     invoice.TotalCost = request.TotalCost;
@@ -29,7 +29,7 @@ namespace QDryClean.Application.UseCases.Invoices.Handlers
                     invoice.Discount = request.Discount;
                     invoice.OrderId = request.OrderId;
 
-                    _applicationDbContext.OrderInvoices.Update(invoice);
+                    _applicationDbContext.Invoices.Update(invoice);
                     await _applicationDbContext.SaveChangesAsync(cancellationToken);
                     return _mapper.Map<InvoiceDto>(invoice);
                 }
