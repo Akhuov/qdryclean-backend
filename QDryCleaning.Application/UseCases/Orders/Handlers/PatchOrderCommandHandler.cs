@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using QDryClean.Application.Absreactions;
+using QDryClean.Application.Common.Exceptions;
 using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Application.Common.Responses;
 using QDryClean.Application.UseCases.Orders.Commands;
@@ -19,10 +20,12 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
 
             var order = await _applicationDbContext.Orders
                 .FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
+
+            if (order == null) {
+                throw new NotFoundException("Заказ не найден.");
+            }
+
             order.Status = request.Status;
-
-
-
 
             if (request.Note != null)
             {

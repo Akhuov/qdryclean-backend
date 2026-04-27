@@ -20,7 +20,7 @@ namespace QDryClean.Application.UseCases.Invoices.Handlers
         {
             try
             {
-                var invoices = await _applicationDbContext.OrderInvoices.ToListAsync();
+                var invoices = await _applicationDbContext.Invoices.ToListAsync();
 
                 var list_of_invoiceDtos = new List<InvoiceDto>();
                 foreach (var invoice in invoices)

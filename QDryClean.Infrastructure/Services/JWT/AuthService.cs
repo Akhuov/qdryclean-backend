@@ -2,6 +2,8 @@
 using QDryClean.Application.Absreactions;
 using QDryClean.Application.Common.Exceptions;
 using QDryClean.Application.Common.Interfaces.Auth;
+using QDryClean.Application.Common.Responses;
+using QDryClean.Application.Dtos;
 
 namespace QDryClean.Infrastructure.Services.JWT;
 
@@ -16,7 +18,7 @@ public class AuthService : IAuthService
         _tokenService = tokenService;
     }
 
-    public async Task<string> LoginAsync(string login, string password)
+    public async Task<ApiResponse<UserAuthDto>> LoginAsync(string login, string password)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.LogIn == login);
         if (user is null)
@@ -27,7 +29,12 @@ public class AuthService : IAuthService
         {
             throw new InvalidLoginOrPasswordException("Invalid password.");
         }
+        var userDto = new UserAuthDto
+        {
+            Token = _tokenService.GenerateToken(user.Id, user.UserRole),
+            Role = user.UserRole.ToString()
+        };
 
-        return _tokenService.GenerateToken(user.Id, user.UserRole);
+        return ApiResponseFactory.Ok(userDto);
     }
 }

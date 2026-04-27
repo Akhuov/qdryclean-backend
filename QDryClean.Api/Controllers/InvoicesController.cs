@@ -7,6 +7,7 @@ using QDryClean.Domain.Enums;
 
 namespace QDryClean.Api.Controllers
 {
+    [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
     [Route("api/v1/invoices")]
     [ApiController]
     public class InvoicesController : ControllerBase
@@ -18,21 +19,8 @@ namespace QDryClean.Api.Controllers
             _mediator = mediator;
 
         }
-        [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
-        [HttpPost]
-        public async Task<IActionResult> CreateInvoiceAsync(CreateInvoiceCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Created("Invoice created successfully.", result);
-        }
-        [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
-        [HttpDelete("{invoiceId:int}")]
-        public async Task<IActionResult> DeleteInvoiceAsync(DeleteInvoiceCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [Authorize(Roles = $"{nameof(UserRole.Receptionist)},{nameof(UserRole.Admin)}")]
+
+
         [HttpPut("{invoiceId:int}")]
         public async Task<IActionResult> UpdateInvoiceAsync(int invoiceId, UpdateInvoiceCommand command)
         {
@@ -40,6 +28,7 @@ namespace QDryClean.Api.Controllers
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllInvoicesAsync()
         {

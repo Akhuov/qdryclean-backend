@@ -21,42 +21,52 @@ namespace QDryClean.Application.UseCases.Dashboard.Handlers
 
         public async Task<ApiResponse<OrdersSummaryViewModel>> Handle(OrdersSummaryQuery request, CancellationToken cancellationToken)
         {
-            var fromParsed = DateTime.ParseExact(
-                request.From,
-                "yyyy-MM-dd",
-                CultureInfo.InvariantCulture);
+            var from = DateTime.ParseExact(request.From, "yyyy-MM-dd", CultureInfo.InvariantCulture).Date;
+            var to = DateTime.ParseExact(request.To, "yyyy-MM-dd", CultureInfo.InvariantCulture).Date.AddDays(1);
 
-            var toParsed = DateTime.ParseExact(
-                request.To,
-                "yyyy-MM-dd",
-                CultureInfo.InvariantCulture);
-
-            var from = fromParsed.Date;
-            var to = toParsed.Date.AddDays(1);
-
-            var all_orders = await _applicationDbContext.Orders
+            var ordersInPeriod = await _applicationDbContext.Orders
                 .Include(o => o.Invoice)
+                    .ThenInclude(i => i.Payments)
                 .WhereNotDeleted()
-                .ToListAsync();
+                .Where(o => o.CreatedAt >= from && o.CreatedAt < to)
+                .ToListAsync(cancellationToken);
 
-            var orders_in_period = all_orders.Where(o => o.CreatedAt >= from && o.CreatedAt < to).ToList();
+            var paidAmount = ordersInPeriod
+                .Where(o => o.Invoice.PaymentStatus == PaymentStatus.Paid)
+                .Sum(o => o.Invoice.TotalCost);
 
-            var summary = new OrdersSummaryViewModel 
+            var unpaidAmount = ordersInPeriod
+                .Where(o => o.Invoice.PaymentStatus == PaymentStatus.NotPaid)
+                .Sum(o => o.Invoice.TotalCost);
+
+            var partialOrders = ordersInPeriod
+                .Where(o => o.Invoice.PaymentStatus == PaymentStatus.Partial);
+
+            paidAmount += partialOrders.Sum(o => o.Invoice.Payments.Sum(p => p.Amount));
+
+            unpaidAmount += partialOrders.Sum(o =>
+                o.Invoice.TotalCost - o.Invoice.Payments.Sum(p => p.Amount));
+
+            var activeOrders = await _applicationDbContext.Orders
+                .WhereNotDeleted()
+                .CountAsync(o => o.Status == OrderStatus.Created, cancellationToken);
+
+            var readyOrders = await _applicationDbContext.Orders
+                .WhereNotDeleted()
+                .CountAsync(o => o.Status == OrderStatus.Ready, cancellationToken);
+
+            var summary = new OrdersSummaryViewModel
             {
-                // Active orders are those that are created but not yet completed or canceled
-                ActiveOrders = all_orders.Count(o => o.Status == OrderStatus.Created),
-                ReadyOrders = all_orders.Count(o => o.Status == OrderStatus.Ready),
-
-                // Total revenue is calculated based on the invoice total cost, categorized by payment status
+                ActiveOrders = activeOrders,
+                ReadyOrders = readyOrders,
                 Revenue = new PaymentRevenueViewModel
                 {
-                    Total = orders_in_period.Sum(o => o.Invoice.TotalCost),
-                    Paid = orders_in_period.Where(o => o.Invoice.PaymentStatus == PaymentStatus.Paid).Sum(o => o.Invoice.TotalCost),
-                    Unpaid = orders_in_period.Where(o => o.Invoice.PaymentStatus == PaymentStatus.NotPaid).Sum(o => o.Invoice.TotalCost),
-                    PartiallyPaid = orders_in_period.Where(o => o.Invoice.PaymentStatus == PaymentStatus.Partial).Sum(o => o.Invoice.TotalCost)
+                    Total = ordersInPeriod.Sum(o => o.Invoice.TotalCost),
+                    Paid = paidAmount,
+                    Unpaid = unpaidAmount,
                 },
-                TotalOrders = orders_in_period.Count(),
-                CompletedOrders = orders_in_period.Count(o => o.Status == OrderStatus.Completed),
+                TotalOrders = ordersInPeriod.Count,
+                CompletedOrders = ordersInPeriod.Count(o => o.Status == OrderStatus.Completed),
             };
 
             return ApiResponseFactory.Ok(summary);
