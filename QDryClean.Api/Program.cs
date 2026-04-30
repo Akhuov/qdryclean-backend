@@ -90,11 +90,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
+        // Временная мера для разработки, разрешающая запросы с указанных адресов React-приложения
         policy.WithOrigins(
-                "http://localhost:5174",
-                "http://192.168.1.5:5174",
-                "http://192.168.1.4:5174",
-                "http://172.28.64.1:5174"
+                "http://localhost:5173",
+                "http://192.168.1.5:5173",
+                "http://192.168.1.4:5173",
+                "http://172.28.64.1:5173"
             )
             .AllowAnyHeader()
             .AllowAnyMethod();

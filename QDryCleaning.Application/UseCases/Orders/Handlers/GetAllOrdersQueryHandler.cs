@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using QDryClean.Api.ViewModels;
 using QDryClean.Application.Absreactions;
+using QDryClean.Application.Common.Helpers;
 using QDryClean.Application.Common.Interfaces.Services;
 using QDryClean.Application.Common.Pagination;
 using QDryClean.Application.Common.Responses;
@@ -18,36 +19,25 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
            ICurrentUserService currentUserService,
            IMapper mapper) : base(applicationDbContext, currentUserService, mapper) { }
         public async Task<ApiResponse<PagedResult<OrderViewModel>>> Handle(
-            GetAllOrdersQuery request,
-            CancellationToken cancellationToken)
+        GetAllOrdersQuery request,
+        CancellationToken cancellationToken)
         {
+            // 1. Parse dates
+            var (fromDate, toDate, error) = DateRangeParser.Parse(request.From, request.To);
+            if (error != null)
+                return ApiResponseFactory.Fail<PagedResult<OrderViewModel>>(400, error);
+
+            // 2. Base query
             var query = _applicationDbContext.Orders
-                .Include(o => o.Invoice)
                 .AsNoTracking()
                 .WhereNotDeleted()
-                .AsQueryable();
+                .ApplyStatus(request.Status)
+                .ApplyDateRange(fromDate, toDate)
+                .ApplySearch(request.Search);
 
-            if (!string.IsNullOrWhiteSpace(request.Search))
-            {
-                var s = request.Search.Trim();
-                var isNumber = int.TryParse(s, out var n);
 
-                // Для SQL Server Like нечувствителен к регистру при CI collation (обычно так и есть)
-                var like = $"%{s}%";
-
-                query = query.Where(o =>
-                    (isNumber && (o.Id == n || o.ReceiptNumber == n)) ||
-                    o.Customer.FullName != null && EF.Functions.Like(o.Customer.FullName, like) ||
-                    o.Notes.Any(note => EF.Functions.Like(note, like))
-                );
-            }
-
-            if (request.Status.HasValue)
-            {
-                query = query.Where(o => o.Status == request.Status);
-            }
-
-            var items = await query
+            // 3. Projection + pagination
+            var result = await query
                 .OrderByDescending(o => o.CreatedAt)
                 .Select(o => new OrderViewModel
                 {
@@ -67,12 +57,9 @@ namespace QDryClean.Application.UseCases.Orders.Handlers
                     ItemsCount = o.Items.Count(),
                     PaymentStatus = o.Invoice.PaymentStatus
                 })
-                .ToPagedResultAsync(
-                    request.Page,
-                    request.PageSize,
-                    cancellationToken);
+                .ToPagedResultAsync(request.Page, request.PageSize, cancellationToken);
 
-            return ApiResponseFactory.Ok(items);
+            return ApiResponseFactory.Ok(result);
         }
     }
 }
